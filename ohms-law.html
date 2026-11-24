@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ohm's Law Calculator</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:600px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0056b3;
+}
+
+.formula{
+    background:#eef5ff;
+    padding:12px;
+    margin:20px 0;
+    border-left:4px solid #0078d7;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+select{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.input-row{
+    display:flex;
+    gap:10px;
+}
+
+.input-row input{
+    flex:2;
+}
+
+.input-row select{
+    flex:1;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:#0078d7;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:20px;
+    padding:15px;
+    background:#f0fff4;
+    border-left:4px solid green;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Ohm's Law Calculator</h1>
+
+<div class="formula">
+<b>Formula:</b><br>
+I = V / R
+</div>
+
+<label>Voltage (V)</label>
+<input type="number" id="voltage">
+
+<label>Resistance</label>
+
+<div class="input-row">
+
+<input type="number" id="resistance">
+
+<select id="unit">
+    <option value="1">Ω</option>
+    <option value="1000">kΩ</option>
+    <option value="1000000">MΩ</option>
+</select>
+
+</div>
+
+<button onclick="calculateCurrent()">
+Calculate Current
+</button>
+
+<div class="result">
+<h2 id="result">
+Current:
+</h2>
+</div>
+
+</div>
+
+<script>
+
+function calculateCurrent(){
+
+    let voltage =
+        parseFloat(document.getElementById("voltage").value);
+
+    let resistance =
+        parseFloat(document.getElementById("resistance").value);
+
+    let unit =
+        parseFloat(document.getElementById("unit").value);
+
+    resistance = resistance * unit;
+
+    if(isNaN(voltage) || isNaN(resistance)){
+
+        alert("Please enter all values");
+
+        return;
+    }
+
+    let current = voltage / resistance;
+
+    document.getElementById("result").innerHTML =
+        "Current = " +
+        current.toFixed(6) +
+        " A";
+}
+
+</script>
+
+</body>
+</html>

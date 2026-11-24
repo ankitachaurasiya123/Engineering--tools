@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LED Series & Parallel Calculator</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0056b3;
+}
+
+.formula{
+    background:#eef5ff;
+    padding:15px;
+    margin:20px 0;
+    border-left:4px solid #0078d7;
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    font-weight:bold;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    background:#0078d7;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:20px;
+    padding:15px;
+    background:#f0fff4;
+    border-left:4px solid green;
+    border-radius:6px;
+}
+
+svg{
+    border:1px solid #ddd;
+    background:white;
+    border-radius:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>LED Series & Parallel Calculator</h1>
+
+<div class="formula">
+
+Formula (Series):
+
+R = (Vs − N × Vf) / I
+
+<br><br>
+
+Formula (Parallel):
+
+R = (Vs − Vf) / (N × I)
+
+</div>
+
+<label>Connection Type</label>
+
+<select id="mode">
+    <option value="series">Series</option>
+    <option value="parallel">Parallel</option>
+</select>
+
+<label>Supply Voltage (Vs)</label>
+<input type="number" id="vs">
+
+<label>LED Forward Voltage (Vf)</label>
+<input type="number" id="vf">
+
+<label>LED Current (mA)</label>
+<input type="number" id="current">
+
+<label>Number of LEDs</label>
+<input type="number" id="ledcount">
+
+<button onclick="calculateLED()">
+
+Calculate
+
+</button>
+
+<div class="result">
+
+<h2 id="result">
+Required Resistor :
+</h2>
+
+<p id="power"></p>
+
+<p id="totalCurrent"></p>
+
+</div>
+
+</div>
+<div style="margin-bottom:20px;">
+    <a href="index.html">🏠 Home</a>
+</div>
+
+<script>
+
+function calculateLED(){
+
+let mode =
+document.getElementById("mode").value;
+
+let vs =
+parseFloat(document.getElementById("vs").value);
+
+let vf =
+parseFloat(document.getElementById("vf").value);
+
+let current =
+parseFloat(document.getElementById("current").value);
+
+let leds =
+parseInt(document.getElementById("ledcount").value);
+
+if(
+isNaN(vs) ||
+isNaN(vf) ||
+isNaN(current) ||
+isNaN(leds)
+){
+    alert("Please fill all fields");
+    return;
+}
+
+current = current / 1000;
+
+let resistor;
+let power;
+let totalCurrent;
+
+if(mode === "series"){
+
+    resistor =
+    (vs - (leds * vf)) / current;
+
+    totalCurrent = current;
+
+}else{
+
+    totalCurrent = current * leds;
+
+    resistor =
+    (vs - vf) / totalCurrent;
+}
+
+power =
+(totalCurrent * totalCurrent) *
+resistor;
+
+document.getElementById("result").innerHTML =
+"Required Resistor = " +
+resistor.toFixed(0) +
+" Ω";
+
+document.getElementById("power").innerHTML =
+"Resistor Power = " +
+power.toFixed(3) +
+" W";
+
+document.getElementById("totalCurrent").innerHTML =
+"Total Current = " +
+(totalCurrent*1000).toFixed(1) +
+" mA";
+
+}
+
+</script>
+
+</body>
+</html>

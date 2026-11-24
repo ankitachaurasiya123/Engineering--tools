@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voltage Divider Calculator</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0056b3;
+    margin-bottom:20px;
+}
+
+.formula{
+    background:#eef5ff;
+    padding:12px;
+    border-left:4px solid #0078d7;
+    margin-bottom:20px;
+}
+
+.input-row{
+    display:flex;
+    gap:10px;
+    margin-top:5px;
+}
+
+.input-row input{
+    flex:2;
+}
+
+.input-row select{
+    flex:1;
+    padding:10px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.btn-group{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+button{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:6px;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.calc-btn{
+    background:#0078d7;
+}
+
+.reset-btn{
+    background:#888;
+}
+
+.result{
+    margin-top:20px;
+    background:#f0fff4;
+    padding:15px;
+    border-left:4px solid green;
+    border-radius:6px;
+}
+
+svg{
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:white;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Voltage Divider Calculator</h1>
+
+<div class="formula">
+    <strong>Formula:</strong><br>
+    Vout = Vin × R2 / (R1 + R2)
+</div>
+
+<div style="text-align:center;margin:20px 0;">
+
+<svg width="350" height="280">
+
+    <text x="175" y="20"
+          text-anchor="middle"
+          font-size="16"
+          font-weight="bold">+Vin</text>
+
+    <line x1="175" y1="30"
+          x2="175" y2="60"
+          stroke="black"
+          stroke-width="2"/>
+
+    <rect x="160" y="60"
+          width="30"
+          height="60"
+          fill="none"
+          stroke="black"
+          stroke-width="2"/>
+
+    <text x="205" y="95">R1</text>
+
+    <line x1="175" y1="120"
+          x2="175" y2="150"
+          stroke="black"
+          stroke-width="2"/>
+
+    <circle cx="175"
+            cy="150"
+            r="5"
+            fill="red"/>
+
+    <text x="195" y="155">Vout</text>
+
+    <line x1="175" y1="150"
+          x2="175" y2="180"
+          stroke="black"
+          stroke-width="2"/>
+
+    <rect x="160" y="180"
+          width="30"
+          height="60"
+          fill="none"
+          stroke="black"
+          stroke-width="2"/>
+
+    <text x="205" y="215">R2</text>
+
+    <line x1="175" y1="240"
+          x2="175" y2="255"
+          stroke="black"
+          stroke-width="2"/>
+
+    <line x1="155" y1="255"
+          x2="195" y2="255"
+          stroke="black"
+          stroke-width="2"/>
+
+    <line x1="160" y1="262"
+          x2="190" y2="262"
+          stroke="black"
+          stroke-width="2"/>
+
+    <line x1="165" y1="269"
+          x2="185" y2="269"
+          stroke="black"
+          stroke-width="2"/>
+
+    <text x="205" y="270">GND</text>
+
+</svg>
+
+</div>
+
+<label>Input Voltage (Vin)</label>
+<input type="number" id="vin" placeholder="Enter Voltage">
+
+<label>R1</label>
+<div class="input-row">
+    <input type="number" id="r1">
+
+    <select id="r1Unit">
+        <option value="1">Ω</option>
+        <option value="1000">kΩ</option>
+        <option value="1000000">MΩ</option>
+    </select>
+</div>
+
+<label>R2</label>
+<div class="input-row">
+    <input type="number" id="r2">
+
+    <select id="r2Unit">
+        <option value="1">Ω</option>
+        <option value="1000">kΩ</option>
+        <option value="1000000">MΩ</option>
+    </select>
+</div>
+
+<div class="btn-group">
+    <button class="calc-btn" onclick="calculate()">
+        Calculate
+    </button>
+
+    <button class="reset-btn" onclick="resetFields()">
+        Reset
+    </button>
+</div>
+
+<div class="result">
+    <h2 id="result">Output Voltage (Vout):</h2>
+    <p id="current"></p>
+</div>
+<div style="margin-bottom:20px;">
+    <a href="index.html">🏠 Home</a>
+</div>
+
+</div>
+
+<script>
+
+function calculate(){
+
+    let vin = parseFloat(document.getElementById("vin").value);
+
+    let r1 = parseFloat(document.getElementById("r1").value);
+    let r2 = parseFloat(document.getElementById("r2").value);
+
+    let r1Unit = parseFloat(document.getElementById("r1Unit").value);
+    let r2Unit = parseFloat(document.getElementById("r2Unit").value);
+
+    r1 = r1 * r1Unit;
+    r2 = r2 * r2Unit;
+
+    if(isNaN(vin) || isNaN(r1) || isNaN(r2)){
+        alert("Please enter all values");
+        return;
+    }
+
+    let vout = (vin * r2) / (r1 + r2);
+
+    let current = vin / (r1 + r2);
+
+    document.getElementById("result").innerHTML =
+        "Output Voltage (Vout): " +
+        vout.toFixed(2) + " V";
+
+    document.getElementById("current").innerHTML =
+        "Divider Current: " +
+        (current * 1000).toFixed(3) +
+        " mA";
+}
+
+function resetFields(){
+
+    document.getElementById("vin").value = "";
+    document.getElementById("r1").value = "";
+    document.getElementById("r2").value = "";
+
+    document.getElementById("r1Unit").value = "1";
+    document.getElementById("r2Unit").value = "1";
+
+    document.getElementById("result").innerHTML =
+        "Output Voltage (Vout):";
+
+    document.getElementById("current").innerHTML = "";
+}
+
+</script>
+
+</body>
+</html>

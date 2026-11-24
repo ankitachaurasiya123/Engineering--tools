@@ -1,0 +1,2778 @@
+ <!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGNOU MCA 2nd Semester Exam Prep</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            padding: 10px; 
+            background: #e8f0fe; 
+        }
+        h1 { text-align: center; color: #1a237e; }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        input[type="text"], input[type="number"], select { 
+            padding: 10px; 
+            margin: 5px; 
+            border: 1px solid #bbdefb; 
+            border-radius: 4px; 
+        }
+        input[type="text"] { width: 50%; }
+        input[type="number"] { width: 80px; }
+        select { width: 200px; }
+        button { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px; 
+        }
+        button:focus, input:focus, select:focus {
+            outline: 2px solid #0288d1;
+            outline-offset: 2px;
+        }
+        .add-btn { background: #3f51b5; color: white; }
+        .add-btn:hover { background: #303f9f; }
+        .focus-btn { background: #0288d1; color: white; }
+        .focus-btn:hover { background: #0277bd; }
+        .search-btn { background: #4caf50; color: white; padding: 5px 10px; }
+        .search-btn:hover { background: #388e3c; }
+        .delete-btn { background: #d32f2f; color: white; padding: 5px 10px; }
+        .delete-btn:hover { background: #b71c1c; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            padding: 12px; 
+            margin: 8px 0; 
+            background: #f5f7ff; 
+            border-radius: 4px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .high-priority { background: #fff9c4; font-weight: bold; }
+        .completed { text-decoration: line-through; color: #555; }
+        #focusContainer { 
+            text-align: center; 
+            padding: 15px; 
+            background: #e3f2fd; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #focusContainer.active { display: block; }
+        #timer { font-size: 2.5em; color: #d81b60; margin: 10px 0; }
+        .timer-btn { background: #ffca28; color: #333; margin: 5px; }
+        .timer-btn:hover { background: #ffb300; }
+        #progress { text-align: center; color: #1a237e; margin-top: 10px; }
+        .timer-input { width: 80px; }
+        .time-info { font-size: 0.9em; color: #444; margin-left: 10px; }
+        .overtime { color: #d32f2f; font-weight: bold; }
+        .subject-group { margin: 20px 0; }
+        .subject-group h3 { color: #0288d1; margin-bottom: 10px; }
+        #topicInput { position: relative; }
+        #topicSuggestions { 
+            position: absolute; 
+            background: white; 
+            border: 1px solid #bbdefb; 
+            width: 50%; 
+            max-height: 150px; 
+            overflow-y: auto; 
+            z-index: 10; 
+            display: none; 
+        }
+        #topicSuggestions div { padding: 10px; cursor: pointer; }
+        #topicSuggestions div:hover { background: #e3f2fd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IGNOU MCA 2nd Semester Exam Prep</h1>
+        <label>Subject: 
+            <select id="subjectSelector" aria-label="Select subject">
+                <option value="MCS212">MCS212 (Discrete Mathematics)</option>
+                <option value="MCS218">MCS218 (Data Communication and Computer Networks)</option>
+                <option value="MCS219">MCS219 (Object-Oriented Analysis and Design)</option>
+                <option value="MCS220">MCS220 (Web Technologies)</option>
+                <option value="MCS221">MCS221 (Data Warehousing and Data Mining)</option>
+                <option value="MCSL222">MCSL222 (OOAD and Web Technologies Lab)</option>
+                <option value="MCSL223">MCSL223 (Computer Network and Data Mining Lab)</option>
+            </select>
+        </label>
+        <div style="position: relative;">
+            <input type="text" id="topicInput" placeholder="Add topic (e.g., Graph Theory)" oninput="suggestTopics()" aria-label="Enter topic name">
+            <div id="topicSuggestions"></div>
+        </div>
+        <input type="number" id="targetTime" placeholder="Target time (min)" min="1" value="60" aria-label="Target time in minutes">
+        <button class="add-btn" onclick="addTopic()" aria-label="Add new topic">Add Topic</button>
+        <button class="focus-btn" onclick="toggleFocusMode()" aria-label="Toggle focus mode">Focus Mode</button>
+        <div id="focusContainer" class="focus-container">
+            <h2>Focus Mode (Pomodoro)</h2>
+            <label>Work Time (min): <input type="number" id="workTime" value="25" min="1" class="timer-input" aria-label="Work time in minutes"></label>
+            <label>Break Time (min): <input type="number" id="breakTime" value="5" min="1" class="timer-input" aria-label="Break time in minutes"></label>
+            <label>Select Topic: 
+                <select id="topicSelector" aria-label="Select topic for focus mode">
+                    <option value="">Select a topic</option>
+                </select>
+            </label>
+            <div id="timer">25:00</div>
+            <button class="timer-btn" onclick="startTimer()" aria-label="Start Pomodoro timer">Start Focus</button>
+            <button class="timer-btn" onclick="resetTimer()" aria-label="Reset Pomodoro timer">Reset</button>
+        </div>
+        <div id="progress">Topics Completed: 0</div>
+        <div id="subjectList"></div>
+    </div>
+    <script>
+        // JavaScript code as provided in the previous response
+        let timerInterval;
+        let timeLeft = 25 * 60; // Default 25 minutes in seconds
+        let isWorking = true;
+        let completedTopics = 0;
+        let workTime = 25 * 60; // Default work time
+        let breakTime = 5 * 60; // Default break time
+        let currentTopic = null;
+        const topicTimes = new Map(); // Track time spent per topic
+        const targetTimes = new Map(); // Track target time per topic
+        const topicsBySubject = new Map(); // Track topics per subject
+
+        // Predefined target times based on syllabus
+        const predefinedTimes = {
+            // MCS212: Discrete Mathematics (retained as no syllabus provided)
+            "Sets, Relations, Functions": 60,
+            "Logic and Propositional Calculus": 90,
+            "Combinatorics": 60,
+            "Graph Theory": 120,
+            "Boolean Algebra": 90,
+            // MCS218: Data Communication and Computer Networks
+            "Data Transmission Basics & Transmission Media": 90,
+            "Data Encoding and Multiplexing": 90,
+            "Multiplexing and Switching": 90,
+            "Data Link Layer Fundamentals": 90,
+            "Retransmission Strategies": 60,
+            "Contention-Based Media Access Protocols": 60,
+            "Wireless LAN and Datalink Layer Switching": 90,
+            "Network Layer Functionality and Design Issues": 90,
+            "Routing Algorithms": 90,
+            "Congestion Control Algorithms": 60,
+            // MCS219: Object-Oriented Analysis and Design
+            "Introduction to Object Oriented Modeling": 90,
+            "Structural Modeling Using UML": 90,
+            "Behavioral Modeling Using UML": 90,
+            "Advanced Behavioral Modeling Using UML": 90,
+            "Architecture Model": 90,
+            "Object Modeling": 90,
+            "Dynamic Modeling": 90,
+            "Functional Modeling": 90,
+            "Basics of System Design": 90,
+            "Object Design": 90,
+            "Advance Object Design": 90,
+            "Implementation Strategies-1": 60,
+            "Implementation Strategies-2": 60,
+            "Objects Mapping with Databases": 90,
+            // MCS220: Web Technologies
+            "Introduction to J2EE Architecture and Design": 90,
+            "Basics of Servlet": 90,
+            "Session Management and Database Connectivity in Servlet": 90,
+            "Java Server Pages": 90,
+            "Introduction to J2EE Frameworks": 90,
+            "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate": 90,
+            "Spring MVC Concepts": 90,
+            "Spring MVC with Bootstrap CSS": 90,
+            "Introduction to Spring Boot": 90,
+            "Configuration of Hibernate (ORM)": 90,
+            "CRUD Application Using Spring Boot and Hibernate": 90,
+            "Spring Security Configuration": 90,
+            "Custom Login Using Security": 60,
+            "Role Based Login": 60,
+            // MCS221: Data Warehousing and Data Mining
+            "Fundamentals of Data Warehouse": 90,
+            "Data Warehouse Architecture": 90,
+            "Dimensional Modeling": 90,
+            "Extract, Transform and Loading": 90,
+            "Introduction to Online Analytical Processing": 90,
+            "Trends in Data Warehouse": 90,
+            "Data Mining - An Introduction": 90,
+            "Data Preprocessing": 60,
+            "Mining Frequent Patterns and Associations": 90,
+            "Classification": 90,
+            "Clustering": 90,
+            "Text and Web Mining": 90,
+            // MCSL222: OOAD and Web Technologies Lab
+            "UML Diagrams Practice": 120,
+            "Servlet Project Creation": 90,
+            "JSP Project Creation": 90,
+            "Spring MVC, Bootstrap, Hibernate CRUD Project": 120,
+            "Maven and Framework for J2EE": 90,
+            "Dependency Injection and Controller": 90,
+            "Form Validation, Bootstrap and CSS": 90,
+            "Hibernate and JPA": 90,
+            "Spring Boot and REST Controller": 90,
+            "REST API, Spring Security, Actuator": 90,
+            "Bootstrap, Role-Based Authentication and CSRF": 90,
+            // MCSL223: Computer Network and Data Mining Lab
+            "Introduction to NS-3 and Network Simulations": 120,
+            "Data Mining with WEKA": 120,
+            "Attribute Selection in WEKA": 60,
+            "Association Rule Mining Lab": 90,
+            "Classification Lab": 90,
+            "Clustering Lab": 90,
+            "Lab Report Writing": 60,
+            "Default": 60
+        };
+
+        // Load data from localStorage on page load
+        document.addEventListener('DOMContentLoaded', loadFromLocalStorage);
+
+        function saveToLocalStorage() {
+            localStorage.setItem('topicsBySubject', JSON.stringify([...topicsBySubject]));
+            localStorage.setItem('topicTimes', JSON.stringify([...topicTimes]));
+            localStorage.setItem('targetTimes', JSON.stringify([...targetTimes]));
+            localStorage.setItem('completedTopics', completedTopics);
+        }
+
+        function loadFromLocalStorage() {
+            const savedTopics = localStorage.getItem('topicsBySubject');
+            const savedTimes = localStorage.getItem('topicTimes');
+            const savedTargets = localStorage.getItem('targetTimes');
+            const savedCompleted = localStorage.getItem('completedTopics');
+
+            if (savedTopics) {
+                topicsBySubject.clear();
+                JSON.parse(savedTopics).forEach(([subject, topics]) => topicsBySubject.set(subject, topics));
+            }
+            if (savedTimes) {
+                topicTimes.clear();
+                JSON.parse(savedTimes).forEach(([id, time]) => topicTimes.set(parseInt(id), time));
+            }
+            if (savedTargets) {
+                targetTimes.clear();
+                JSON.parse(savedTargets).forEach(([id, time]) => targetTimes.set(parseInt(id), time));
+            }
+            if (savedCompleted) {
+                completedTopics = parseInt(savedCompleted);
+            }
+
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+        }
+
+        function suggestTopics() {
+            const topicInput = document.getElementById('topicInput');
+            const topicSuggestions = document.getElementById('topicSuggestions');
+            const subject = document.getElementById('subjectSelector').value;
+            const query = topicInput.value.trim().toLowerCase();
+            topicSuggestions.innerHTML = '';
+            if (query.length < 2) {
+                topicSuggestions.style.display = 'none';
+                return;
+            }
+
+            const subjectTopics = {
+                MCS212: [
+                    "Sets, Relations, Functions",
+                    "Logic and Propositional Calculus",
+                    "Combinatorics",
+                    "Graph Theory",
+                    "Boolean Algebra"
+                ],
+                MCS218: [
+                    "Data Transmission Basics & Transmission Media",
+                    "Data Encoding and Multiplexing",
+                    "Multiplexing and Switching",
+                    "Data Link Layer Fundamentals",
+                    "Retransmission Strategies",
+                    "Contention-Based Media Access Protocols",
+                    "Wireless LAN and Datalink Layer Switching",
+                    "Network Layer Functionality and Design Issues",
+                    "Routing Algorithms",
+                    "Congestion Control Algorithms"
+                ],
+                MCS219: [
+                    "Introduction to Object Oriented Modeling",
+                    "Structural Modeling Using UML",
+                    "Behavioral Modeling Using UML",
+                    "Advanced Behavioral Modeling Using UML",
+                    "Architecture Model",
+                    "Object Modeling",
+                    "Dynamic Modeling",
+                    "Functional Modeling",
+                    "Basics of System Design",
+                    "Object Design",
+                    "Advance Object Design",
+                    "Implementation Strategies-1",
+                    "Implementation Strategies-2",
+                    "Objects Mapping with Databases"
+                ],
+                MCS220: [
+                    "Introduction to J2EE Architecture and Design",
+                    "Basics of Servlet",
+                    "Session Management and Database Connectivity in Servlet",
+                    "Java Server Pages",
+                    "Introduction to J2EE Frameworks",
+                    "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate",
+                    "Spring MVC Concepts",
+                    "Spring MVC with Bootstrap CSS",
+                    "Introduction to Spring Boot",
+                    "Configuration of Hibernate (ORM)",
+                    "CRUD Application Using Spring Boot and Hibernate",
+                    "Spring Security Configuration",
+                    "Custom Login Using Security",
+                    "Role Based Login"
+                ],
+                MCS221: [
+                    "Fundamentals of Data Warehouse",
+                    "Data Warehouse Architecture",
+                    "Dimensional Modeling",
+                    "Extract, Transform and Loading",
+                    "Introduction to Online Analytical Processing",
+                    "Trends in Data Warehouse",
+                    "Data Mining - An Introduction",
+                    "Data Preprocessing",
+                    "Mining Frequent Patterns and Associations",
+                    "Classification",
+                    "Clustering",
+                    "Text and Web Mining"
+                ],
+                MCSL222: [
+                    "UML Diagrams Practice",
+                    "Servlet Project Creation",
+                    "JSP Project Creation",
+                    "Spring MVC, Bootstrap, Hibernate CRUD Project",
+                    "Maven and Framework for J2EE",
+                    "Dependency Injection and Controller",
+                    "Form Validation, Bootstrap and CSS",
+                    "Hibernate and JPA",
+                    "Spring Boot and REST Controller",
+                    "REST API, Spring Security, Actuator",
+                    "Bootstrap, Role-Based Authentication and CSRF"
+                ],
+                MCSL223: [
+                    "Introduction to NS-3 and Network Simulations",
+                    "Data Mining with WEKA",
+                    "Attribute Selection in WEKA",
+                    "Association Rule Mining Lab",
+                    "Classification Lab",
+                    "Clustering Lab",
+                    "Lab Report Writing"
+                ]
+            };
+
+            const matches = subjectTopics[subject].filter(topic => 
+                topic.toLowerCase().includes(query)
+            );
+            if (matches.length > 0) {
+                matches.forEach(topic => {
+                    const div = document.createElement('div');
+                    div.textContent = `${topic} (${predefinedTimes[topic]} min)`;
+                    div.onclick = () => {
+                        topicInput.value = topic;
+                        document.getElementById('targetTime').value = predefinedTimes[topic];
+                        topicSuggestions.style.display = 'none';
+                    };
+                    topicSuggestions.appendChild(div);
+                });
+                topicSuggestions.style.display = 'block';
+            } else {
+                topicSuggestions.style.display = 'none';
+            }
+        }
+
+        function searchTopic(topicText) {
+            const query = encodeURIComponent(topicText);
+            const url = `https://www.geeksforgeeks.org/search/?q=${query}`;
+            window.open(url, '_blank');
+        }
+
+        function togglePriority(topicId, subject) {
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isHighPriority = !topic.isHighPriority;
+            updateSubjectList();
+            saveToLocalStorage();
+        }
+
+        function addTopic() {
+            const subjectSelector = document.getElementById('subjectSelector');
+            const topicInput = document.getElementById('topicInput');
+            const targetTimeInput = document.getElementById('targetTime');
+            const subject = subjectSelector.value;
+            const topicText = topicInput.value.trim();
+            let targetTime = parseInt(targetTimeInput.value);
+
+            if (topicText === '') {
+                alert('Please enter a topic!');
+                return;
+            }
+            if (isNaN(targetTime) || targetTime <= 0) {
+                alert('Please enter a valid target time (greater than 0 minutes)!');
+                return;
+            }
+
+            for (const [topic, time] of Object.entries(predefinedTimes)) {
+                if (topicText.toLowerCase().includes(topic.toLowerCase())) {
+                    targetTime = targetTime || time;
+                    break;
+                }
+            }
+            targetTime = targetTime || predefinedTimes["Default"];
+
+            const topicId = Date.now();
+            const topicData = { id: topicId, text: topicText, subject, targetTime, isHighPriority: false };
+
+            if (!topicsBySubject.has(subject)) {
+                topicsBySubject.set(subject, []);
+            }
+            topicsBySubject.get(subject).push(topicData);
+            topicTimes.set(topicId, 0);
+            targetTimes.set(topicId, targetTime * 60);
+
+            updateSubjectList();
+            updateTopicSelector();
+            topicInput.value = '';
+            targetTimeInput.value = predefinedTimes["Default"];
+            document.getElementById('topicSuggestions').style.display = 'none';
+            saveToLocalStorage();
+        }
+
+        function toggleComplete(topicId) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            const span = li.querySelector('span');
+            if (!span.classList.contains('completed')) {
+                completedTopics++;
+            } else {
+                completedTopics--;
+            }
+            span.classList.toggle('completed');
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function deleteTopic(topicId, subject) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            if (li.querySelector('span').classList.contains('completed')) {
+                completedTopics--;
+            }
+            topicsBySubject.set(subject, topicsBySubject.get(subject).filter(t => t.id !== topicId));
+            topicTimes.delete(topicId);
+            targetTimes.delete(topicId);
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Topics Completed: ${completedTopics}`;
+        }
+
+        function updateSubjectList() {
+            const subjectList = document.getElementById('subjectList');
+            subjectList.innerHTML = '';
+            topicsBySubject.forEach((topics, subject) => {
+                const div = document.createElement('div');
+                div.className = 'subject-group';
+                div.innerHTML = `<h3>${subject}</h3>`;
+                const ul = document.createElement('ul');
+                topics.sort((a, b) => {
+                    if (a.isHighPriority === b.isHighPriority) return b.id - a.id;
+                    return b.isHighPriority ? 1 : -1;
+                });
+                topics.forEach(topic => {
+                    const timeSpent = Math.round(topicTimes.get(topic.id) / 60);
+                    const targetTime = targetTimes.get(topic.id) / 60;
+                    const timeDiff = targetTime - timeSpent;
+                    const isOvertime = timeDiff < 0;
+                    ul.innerHTML += `
+                        <li data-topic-id="${topic.id}" class="${topic.isHighPriority ? 'high-priority' : ''}">
+                            <span onclick="toggleComplete(${topic.id})">${topic.text}</span>
+                            <span class="time-info ${isOvertime ? 'overtime' : ''}">
+                                Target: ${targetTime} min | Spent: ${timeSpent} min | Diff: ${timeDiff.toFixed(1)} min
+                            </span>
+                            <div>
+                                <label style="font-size: 0.9em; margin-right: 10px;">
+                                    <input type="checkbox" ${topic.isHighPriority ? 'checked' : ''} 
+                                    onchange="togglePriority(${topic.id}, '${subject}')" aria-label="Mark as high priority"> High Priority
+                                </label>
+                                <button class="search-btn" onclick="searchTopic('${topic.text}')" aria-label="Search topic on GeeksforGeeks">Search Topic</button>
+                                <button class="delete-btn" onclick="deleteTopic(${topic.id}, '${subject}')" aria-label="Delete topic">Delete</button>
+                            </div>
+                        </li>
+                    `;
+                });
+                div.appendChild(ul);
+                subjectList.appendChild(div);
+            });
+        }
+
+        function updateTopicSelector() {
+            const topicSelector = document.getElementById('topicSelector');
+            topicSelector.innerHTML = '<option value="">Select a topic</option>';
+            topicsBySubject.forEach((topics, subject) => {
+                topics.forEach(topic => {
+                    const option = document.createElement('option');
+                    option.value = topic.id;
+                    option.textContent = `${subject}: ${topic.text}`;
+                    topicSelector.appendChild(option);
+                });
+            });
+        }
+
+        function toggleFocusMode() {
+            const focusContainer = document.getElementById('focusContainer');
+            focusContainer.classList.toggle('active');
+            if (focusContainer.classList.contains('active')) {
+                updateTimerSettings();
+            }
+        }
+
+        function updateTimerSettings() {
+            const workInput = parseInt(document.getElementById('workTime').value);
+            const breakInput = parseInt(document.getElementById('breakTime').value);
+            if (isNaN(workInput) || workInput <= 0) {
+                alert('Work time must be greater than 0 minutes!');
+                document.getElementById('workTime').value = 25;
+                workTime = 25 * 60;
+            } else {
+                workTime = workInput * 60;
+            }
+            if (isNaN(breakInput) || breakInput <= 0) {
+                alert('Break time must be greater than 0 minutes!');
+                document.getElementById('breakTime').value = 5;
+                breakTime = 5 * 60;
+            } else {
+                breakTime = breakInput * 60;
+            }
+            timeLeft = workTime;
+            updateTimerDisplay();
+        }
+
+        function startTimer() {
+            updateTimerSettings();
+            const topicSelector = document.getElementById('topicSelector');
+            currentTopic = topicSelector.value;
+            if (!currentTopic) {
+                alert('Please select a topic to track time!');
+                return;
+            }
+            if (!timerInterval) {
+                let lastUpdate = Date.now();
+                timerInterval = setInterval(() => {
+                    const now = Date.now();
+                    if (isWorking && now - lastUpdate >= 60000) { // Update every minute
+                        const currentTime = topicTimes.get(parseInt(currentTopic)) || 0;
+                        topicTimes.set(parseInt(currentTopic), currentTime + 60);
+                        updateSubjectList();
+                        saveToLocalStorage();
+                        lastUpdate = now;
+                    }
+                    if (timeLeft <= 0) {
+                        isWorking = !isWorking;
+                        timeLeft = isWorking ? workTime : breakTime;
+                        alert(isWorking ? 'Work session done! Take a break.' : 'Break over! Start studying.');
+                    }
+                    updateTimerDisplay();
+                    timeLeft--;
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            updateTimerSettings();
+            isWorking = true;
+            currentTopic = null;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+    </script>
+</body>
+</html>
+*/<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGNOU MCA 2nd Semester Exam Prep</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            padding: 10px; 
+            background: #e8f0fe; 
+        }
+        h1 { text-align: center; color: #1a237e; }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+        }
+        input[type="text"], input[type="number"], select { 
+            padding: 10px; 
+            margin: 5px; 
+            border: 1px solid #bbdefb; 
+            border-radius: 4px; 
+        }
+        input[type="text"] { width: 50%; }
+        input[type="number"] { width: 80px; }
+        select { width: 200px; }
+        button { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px; 
+        }
+        button:focus, input:focus, select:focus {
+            outline: 2px solid #0288d1;
+            outline-offset: 2px;
+        }
+        .add-btn { background: #3f51b5; color: white; }
+        .add-btn:hover { background: #303f9f; }
+        .focus-btn { background: #0288d1; color: white; }
+        .focus-btn:hover { background: #0277bd; }
+        .syllabus-btn { background: #7b1fa2; color: white; }
+        .syllabus-btn:hover { background: #6a1b9a; }
+        .search-btn { background: #4caf50; color: white; padding: 5px 10px; }
+        .search-btn:hover { background: #388e3c; }
+        .delete-btn { background: #d32f2f; color: white; padding: 5px 10px; }
+        .delete-btn:hover { background: #b71c1c; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            padding: 12px; 
+            margin: 8px 0; 
+            background: #f5f7ff; 
+            border-radius: 4px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .high-priority { background: #fff9c4; font-weight: bold; }
+        .completed { text-decoration: line-through; color: #555; }
+        #focusContainer { 
+            text-align: center; 
+            padding: 15px; 
+            background: #e3f2fd; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #focusContainer.active { display: block; }
+        #syllabusContainer { 
+            padding: 15px; 
+            background: #e8eaf6; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #syllabusContainer.active { display: block; }
+        #syllabusContainer h3 { color: #1a237e; margin-top: 0; }
+        #syllabusContainer ul { list-style-type: disc; padding-left: 20px; }
+        #syllabusContainer li { background: none; padding: 5px; margin: 5px 0; }
+        #timer { font-size: 2.5em; color: #d81b60; margin: 10px 0; }
+        .timer-btn { background: #ffca28; color: #333; margin: 5px; }
+        .timer-btn:hover { background: #ffb300; }
+        #progress { text-align: center; color: #1a237e; margin-top: 10px; }
+        .timer-input { width: 80px; }
+        .time-info { font-size: 0.9em; color: #444; margin-left: 10px; }
+        .overtime { color: #d32f2f; font-weight: bold; }
+        .subject-group { margin: 20px 0; }
+        .subject-group h3 { color: #0288d1; margin-bottom: 10px; }
+        #topicInput { position: relative; }
+        #topicSuggestions { 
+            position: absolute; 
+            background: white; 
+            border: 1px solid #bbdefb; 
+            width: 50%; 
+            max-height: 150px; 
+            overflow-y: auto; 
+            z-index: 10; 
+            display: none; 
+        }
+        #topicSuggestions div { padding: 10px; cursor: pointer; }
+        #topicSuggestions div:hover { background: #e3f2fd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IGNOU MCA 2nd Semester Exam Prep</h1>
+        <label>Subject: 
+            <select id="subjectSelector" aria-label="Select subject" onchange="updateSyllabusDisplay()">
+                <option value="MCS212">MCS212 (Discrete Mathematics)</option>
+                <option value="MCS218">MCS218 (Data Communication and Computer Networks)</option>
+                <option value="MCS219">MCS219 (Object-Oriented Analysis and Design)</option>
+                <option value="MCS220">MCS220 (Web Technologies)</option>
+                <option value="MCS221">MCS221 (Data Warehousing and Data Mining)</option>
+                <option value="MCSL222">MCSL222 (OOAD and Web Technologies Lab)</option>
+                <option value="MCSL223">MCSL223 (Computer Network and Data Mining Lab)</option>
+            </select>
+        </label>
+        <button class="syllabus-btn" onclick="toggleSyllabus()" aria-label="Toggle syllabus display" aria-expanded="false">View Syllabus</button>
+        <div id="syllabusContainer" aria-hidden="true">
+            <h3 id="syllabusTitle">Syllabus for MCS212 (Discrete Mathematics)</h3>
+            <ul id="syllabusList"></ul>
+        </div>
+        <div style="position: relative;">
+            <input type="text" id="topicInput" placeholder="Add topic (e.g., Graph Theory)" oninput="suggestTopics()" aria-label="Enter topic name">
+            <div id="topicSuggestions"></div>
+        </div>
+        <input type="number" id="targetTime" placeholder="Target time (min)" min="1" value="60" aria-label="Target time in minutes">
+        <button class="add-btn" onclick="addTopic()" aria-label="Add new topic">Add Topic</button>
+        <button class="focus-btn" onclick="toggleFocusMode()" aria-label="Toggle focus mode">Focus Mode</button>
+        <div id="focusContainer" class="focus-container">
+            <h2>Focus Mode (Pomodoro)</h2>
+            <label>Work Time (min): <input type="number" id="workTime" value="25" min="1" class="timer-input" aria-label="Work time in minutes"></label>
+            <label>Break Time (min): <input type="number" id="breakTime" value="5" min="1" class="timer-input" aria-label="Break time in minutes"></label>
+            <label>Select Topic: 
+                <select id="topicSelector" aria-label="Select topic for focus mode">
+                    <option value="">Select a topic</option>
+                </select>
+            </label>
+            <div id="timer">25:00</div>
+            <button class="timer-btn" onclick="startTimer()" aria-label="Start Pomodoro timer">Start Focus</button>
+            <button class="timer-btn" onclick="resetTimer()" aria-label="Reset Pomodoro timer">Reset</button>
+        </div>
+        <div id="progress">Topics Completed: 0</div>
+        <div id="subjectList"></div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 25 * 60; // Default 25 minutes in seconds
+        let isWorking = true;
+        let completedTopics = 0;
+        let workTime = 25 * 60; // Default work time
+        let breakTime = 5 * 60; // Default break time
+        let currentTopic = null;
+        const topicTimes = new Map(); // Track time spent per topic
+        const targetTimes = new Map(); // Track target time per topic
+        const topicsBySubject = new Map(); // Track topics per subject
+
+        // Predefined target times based on syllabus
+        const predefinedTimes = {
+            // MCS212: Discrete Mathematics (retained as no syllabus provided)
+            "Sets, Relations, Functions": 60,
+            "Logic and Propositional Calculus": 90,
+            "Combinatorics": 60,
+            "Graph Theory": 120,
+            "Boolean Algebra": 90,
+            // MCS218: Data Communication and Computer Networks
+            "Data Transmission Basics & Transmission Media": 90,
+            "Data Encoding and Multiplexing": 90,
+            "Multiplexing and Switching": 90,
+            "Data Link Layer Fundamentals": 90,
+            "Retransmission Strategies": 60,
+            "Contention-Based Media Access Protocols": 60,
+            "Wireless LAN and Datalink Layer Switching": 90,
+            "Network Layer Functionality and Design Issues": 90,
+            "Routing Algorithms": 90,
+            "Congestion Control Algorithms": 60,
+            "Transport Services and Mechanism": 90,
+            "TCP/UDP": 90,
+            "Network Security-I": 90,
+            "Network Security-II": 90,
+            // MCS219: Object-Oriented Analysis and Design
+            "Introduction to Object Oriented Modeling": 90,
+            "Structural Modeling Using UML": 90,
+            "Behavioral Modeling Using UML": 90,
+            "Advanced Behavioral Modeling Using UML": 90,
+            "Architecture Model": 90,
+            "Object Modeling": 90,
+            "Dynamic Modeling": 90,
+            "Functional Modeling": 90,
+            "Basics of System Design": 90,
+            "Object Design": 90,
+            "Advance Object Design": 90,
+            "Implementation Strategies-1": 60,
+            "Implementation Strategies-2": 60,
+            "Objects Mapping with Databases": 90,
+            // MCS220: Web Technologies
+            "Introduction to J2EE Architecture and Design": 90,
+            "Basics of Servlet": 90,
+            "Session Management and Database Connectivity in Servlet": 90,
+            "Java Server Pages": 90,
+            "Introduction to J2EE Frameworks": 90,
+            "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate": 90,
+            "Spring MVC Concepts": 90,
+            "Spring MVC with Bootstrap CSS": 90,
+            "Introduction to Spring Boot": 90,
+            "Configuration of Hibernate (ORM)": 90,
+            "CRUD Application Using Spring Boot and Hibernate": 90,
+            "Spring Security Configuration": 90,
+            "Custom Login Using Security": 60,
+            "Role Based Login": 60,
+            // MCS221: Data Warehousing and Data Mining
+            "Fundamentals of Data Warehouse": 90,
+            "Data Warehouse Architecture": 90,
+            "Dimensional Modeling": 90,
+            "Extract, Transform and Loading": 90,
+            "Introduction to Online Analytical Processing": 90,
+            "Trends in Data Warehouse": 90,
+            "Data Mining - An Introduction": 90,
+            "Data Preprocessing": 60,
+            "Mining Frequent Patterns and Associations": 90,
+            "Classification": 90,
+            "Clustering": 90,
+            "Text and Web Mining": 90,
+            // MCSL222: OOAD and Web Technologies Lab
+            "UML Diagrams Practice": 120,
+            "Servlet Project Creation": 90,
+            "JSP Project Creation": 90,
+            "Spring MVC, Bootstrap, Hibernate CRUD Project": 120,
+            "Maven and Framework for J2EE": 90,
+            "Dependency Injection and Controller": 90,
+            "Form Validation, Bootstrap and CSS": 90,
+            "Hibernate and JPA": 90,
+            "Spring Boot and REST Controller": 90,
+            "REST API, Spring Security, Actuator": 90,
+            "Bootstrap, Role-Based Authentication and CSRF": 90,
+            // MCSL223: Computer Network and Data Mining Lab
+            "Introduction to NS-3 and Network Simulations": 120,
+            "Data Mining with WEKA": 120,
+            "Attribute Selection in WEKA": 60,
+            "Association Rule Mining Lab": 90,
+            "Classification Lab": 90,
+            "Clustering Lab": 90,
+            "Lab Report Writing": 60,
+            "Default": 60
+        };
+
+        // Syllabus data for display
+        const syllabusData = {
+            MCS212: [
+                { unit: "Sets, Relations, Functions", description: "Basics of set theory, relations, and functions." },
+                { unit: "Logic and Propositional Calculus", description: "Propositional logic, truth tables, and logical equivalences." },
+                { unit: "Combinatorics", description: "Counting principles, permutations, and combinations." },
+                { unit: "Graph Theory", description: "Graphs, trees, and graph algorithms." },
+                { unit: "Boolean Algebra", description: "Boolean functions, logic gates, and minimization techniques." }
+            ],
+            MCS218: [
+                { unit: "Data Transmission Basics & Transmission Media", description: "Channel, baud, bandwidth, frequency, modes of transmission, impairments, guided and unguided media." },
+                { unit: "Data Encoding and Multiplexing", description: "Analog and digital modulation techniques, digital encoding, frequency and time division multiplexing." },
+                { unit: "Multiplexing and Switching", description: "FDM, TDM, DSL, circuit and packet switching." },
+                { unit: "Data Link Layer Fundamentals", description: "Framing, error detection, CRC, flow control." },
+                { unit: "Retransmission Strategies", description: "Stop & Wait ARQ, Go-Back-N ARQ, Selective Repeat ARQ, pipelining, piggybacking." },
+                { unit: "Contention-Based Media Access Protocols", description: "Pure ALOHA, Slotted ALOHA, CSMA, CSMA/CD, Ethernet (IEEE 802.3)." },
+                { unit: "Wireless LAN and Datalink Layer Switching", description: "IEEE 802.11, hidden/exposed station problems, MACA/MACAW, bridges." },
+                { unit: "Network Layer Functionality and Design Issues", description: "Services, packet switching, IP addressing, congestion, routing, delays." },
+                { unit: "Routing Algorithms", description: "Flooding, shortest path, distance vector, link state, hierarchical routing, IP protocols." },
+                { unit: "Congestion Control Algorithms", description: "Congestion causes, prevention, open-loop control, traffic shaping." },
+                { unit: "Transport Services and Mechanism", description: "Transport layer services, addressing, multiplexing, flow control, connection management." },
+                { unit: "TCP/UDP", description: "TCP and UDP services, segment headers, connection management, flow and congestion control." },
+                { unit: "Network Security-I", description: "Cryptography, symmetric and public key algorithms (RSA, Diffie-Hellman, DSA)." },
+                { unit: "Network Security-II", description: "Cyber threats, attacks (DoS, phishing, malware), countermeasures, firewalls, IDS." }
+            ],
+            MCS219: [
+                { unit: "Introduction to Object Oriented Modeling", description: "Object orientation principles: abstraction, encapsulation, inheritance, polymorphism." },
+                { unit: "Structural Modeling Using UML", description: "Classes, relationships, class diagrams, advanced structural modeling." },
+                { unit: "Behavioral Modeling Using UML", description: "Interactions, use cases, sequence and collaboration diagrams, activity diagrams." },
+                { unit: "Advanced Behavioral Modeling Using UML", description: "Events, signals, state machines, processes, threads, time and space." },
+                { unit: "Architecture Model", description: "Logical and physical architecture, component and deployment diagrams." },
+                { unit: "Object Modeling", description: "Aggregation, abstract classes, multiple inheritance, generalization, constraints." },
+                { unit: "Dynamic Modeling", description: "Events, state diagrams, concurrency, advanced dynamic modeling." },
+                { unit: "Functional Modeling", description: "Data flow diagrams, processes, actors, data stores, control flows." },
+                { unit: "Basics of System Design", description: "OO analysis to design, subsystems, coupling, cohesion, concurrency." },
+                { unit: "Object Design", description: "Design steps, algorithms, data structures, operations, optimization." },
+                { unit: "Advance Object Design", description: "Control implementation, inheritance adjustment, association design." },
+                { unit: "Implementation Strategies-1", description: "Mapping design to code, class definitions, association implementations." },
+                { unit: "Implementation Strategies-2", description: "Methods from collaboration diagrams, constraints, state charts, persistency." },
+                { unit: "Objects Mapping with Databases", description: "Relational database schema, object-to-table mapping, associations, generalizations." }
+            ],
+            MCS220: [
+                { unit: "Introduction to J2EE Architecture and Design", description: "Web servers, J2EE overview, design patterns (MVC, Singleton, Factory)." },
+                { unit: "Basics of Servlet", description: "Servlet architecture, life cycle, HTTP protocol, creating and deploying servlets." },
+                { unit: "Session Management and Database Connectivity in Servlet", description: "HttpSession, cookies, URL rewriting, database operations." },
+                { unit: "Java Server Pages", description: "JSP life cycle, API, directives, scripting elements, implicit objects, JSTL." },
+                { unit: "Introduction to J2EE Frameworks", description: "Struts, Spring, Hibernate, annotations, JPA overview." },
+                { unit: "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate", description: "Struts2, Spring MVC, Spring Boot, Hibernate features, comparisons." },
+                { unit: "Spring MVC Concepts", description: "Setup, IoC, dependency injection, controllers, views, request mapping." },
+                { unit: "Spring MVC with Bootstrap CSS", description: "Bootstrap configuration, custom CSS, Hibernate integration, CRUD operations." },
+                { unit: "Introduction to Spring Boot", description: "Spring Boot starters, DevTools, Actuator, application properties, Thymeleaf." },
+                { unit: "Configuration of Hibernate (ORM)", description: "Hibernate setup, annotations, CRUD features, HQL." },
+                { unit: "CRUD Application Using Spring Boot and Hibernate", description: "Spring Data repositories, association mappings, CRUD examples." },
+                { unit: "Spring Security Configuration", description: "Web security, JCA, JSSE, Spring Security setup, controllers." },
+                { unit: "Custom Login Using Security", description: "Custom login forms, Spring configuration, integration testing." },
+                { unit: "Role Based Login", description: "User roles, access restrictions, JSP taglibs, CSRF protection." }
+            ],
+            MCS221: [
+                { unit: "Fundamentals of Data Warehouse", description: "Evolution, need, design approaches, OLTP vs. OLAP, metadata." },
+                { unit: "Data Warehouse Architecture", description: "Architecture types, components, layers, data marts." },
+                { unit: "Dimensional Modeling", description: "Facts, dimensions, star and snowflake schemas, aggregate tables." },
+                { unit: "Extract, Transform and Loading", description: "ETL process, data extraction, transformation, loading, ELT." },
+                { unit: "Introduction to Online Analytical Processing", description: "OLAP characteristics, multidimensional analysis, hypercubes." },
+                { unit: "Trends in Data Warehouse", description: "Data lakes, cloud warehousing, real-time warehousing, Hadoop." },
+                { unit: "Data Mining - An Introduction", description: "Data mining purpose, types, tools, applications." },
+                { unit: "Data Preprocessing", description: "Data cleaning, reduction, handling missing values, noisy data." },
+                { unit: "Mining Frequent Patterns and Associations", description: "Association rule mining, Apriori algorithm, multilevel rules." },
+                { unit: "Classification", description: "Classification techniques, decision trees, classifier evaluation." },
+                { unit: "Clustering", description: "Clustering methods and applications." },
+                { unit: "Text and Web Mining", description: "Text analysis, web content, structure, and usage mining." }
+            ],
+            MCSL222: [
+                { unit: "UML Diagrams Practice", description: "Creating UML diagrams using tools, practice exercises." },
+                { unit: "Servlet Project Creation", description: "Setting up and developing servlet-based projects." },
+                { unit: "JSP Project Creation", description: "Building JSP-based web applications." },
+                { unit: "Spring MVC, Bootstrap, Hibernate CRUD Project", description: "Developing a CRUD application with Spring MVC, Bootstrap, Hibernate." },
+                { unit: "Maven and Framework for J2EE", description: "Using Maven for J2EE project setup and management." },
+                { unit: "Dependency Injection and Controller", description: "Implementing dependency injection and controllers in Spring." },
+                { unit: "Form Validation, Bootstrap and CSS", description: "Form validation, styling with Bootstrap and custom CSS." },
+                { unit: "Hibernate and JPA", description: "Hibernate setup, JPA-based database operations." },
+                { unit: "Spring Boot and REST Controller", description: "Building REST APIs with Spring Boot." },
+                { unit: "REST API, Spring Security, Actuator", description: "Implementing REST APIs, security, and actuator endpoints." },
+                { unit: "Bootstrap, Role-Based Authentication and CSRF", description: "Role-based authentication, CSRF protection, Bootstrap UI." }
+            ],
+            MCSL223: [
+                { unit: "Introduction to NS-3 and Network Simulations", description: "Setting up NS-3, running network simulations." },
+                { unit: "Data Mining with WEKA", description: "Using WEKA for data mining tasks." },
+                { unit: "Attribute Selection in WEKA", description: "Attribute selection techniques in WEKA." },
+                { unit: "Association Rule Mining Lab", description: "Implementing association rule mining in WEKA." },
+                { unit: "Classification Lab", description: "Performing classification tasks in WEKA." },
+                { unit: "Clustering Lab", description: "Clustering experiments using WEKA." },
+                { unit: "Lab Report Writing", description: "Writing reports for lab experiments." }
+            ]
+        };
+
+        // Load data from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            updateSyllabusDisplay();
+        });
+
+        function saveToLocalStorage() {
+            localStorage.setItem('topicsBySubject', JSON.stringify([...topicsBySubject]));
+            localStorage.setItem('topicTimes', JSON.stringify([...topicTimes]));
+            localStorage.setItem('targetTimes', JSON.stringify([...targetTimes]));
+            localStorage.setItem('completedTopics', completedTopics);
+        }
+
+        function loadFromLocalStorage() {
+            const savedTopics = localStorage.getItem('topicsBySubject');
+            const savedTimes = localStorage.getItem('topicTimes');
+            const savedTargets = localStorage.getItem('targetTimes');
+            const savedCompleted = localStorage.getItem('completedTopics');
+
+            if (savedTopics) {
+                topicsBySubject.clear();
+                JSON.parse(savedTopics).forEach(([subject, topics]) => topicsBySubject.set(subject, topics));
+            }
+            if (savedTimes) {
+                topicTimes.clear();
+                JSON.parse(savedTimes).forEach(([id, time]) => topicTimes.set(parseInt(id), time));
+            }
+            if (savedTargets) {
+                targetTimes.clear();
+                JSON.parse(savedTargets).forEach(([id, time]) => targetTimes.set(parseInt(id), time));
+            }
+            if (savedCompleted) {
+                completedTopics = parseInt(savedCompleted);
+            }
+
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+        }
+
+        function toggleSyllabus() {
+            const syllabusContainer = document.getElementById('syllabusContainer');
+            const syllabusBtn = document.querySelector('.syllabus-btn');
+            const isActive = syllabusContainer.classList.toggle('active');
+            syllabusContainer.setAttribute('aria-hidden', !isActive);
+            syllabusBtn.setAttribute('aria-expanded', isActive);
+            syllabusBtn.textContent = isActive ? 'Hide Syllabus' : 'View Syllabus';
+        }
+
+        function updateSyllabusDisplay() {
+            const subject = document.getElementById('subjectSelector').value;
+            const syllabusTitle = document.getElementById('syllabusTitle');
+            const syllabusList = document.getElementById('syllabusList');
+            const subjectName = document.getElementById('subjectSelector').options[document.getElementById('subjectSelector').selectedIndex].text;
+
+            syllabusTitle.textContent = `Syllabus for ${subjectName}`;
+            syllabusList.innerHTML = '';
+            syllabusData[subject].forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.unit}</strong>: ${item.description}`;
+                syllabusList.appendChild(li);
+            });
+        }
+
+        function suggestTopics() {
+            const topicInput = document.getElementById('topicInput');
+            const topicSuggestions = document.getElementById('topicSuggestions');
+            const subject = document.getElementById('subjectSelector').value;
+            const query = topicInput.value.trim().toLowerCase();
+            topicSuggestions.innerHTML = '';
+            if (query.length < 2) {
+                topicSuggestions.style.display = 'none';
+                return;
+            }
+
+            const subjectTopics = Object.keys(predefinedTimes).filter(topic => 
+                syllabusData[subject].some(item => item.unit === topic)
+            );
+
+            const matches = subjectTopics.filter(topic => 
+                topic.toLowerCase().includes(query)
+            );
+            if (matches.length > 0) {
+                matches.forEach(topic => {
+                    const div = document.createElement('div');
+                    div.textContent = `${topic} (${predefinedTimes[topic]} min)`;
+                    div.onclick = () => {
+                        topicInput.value = topic;
+                        document.getElementById('targetTime').value = predefinedTimes[topic];
+                        topicSuggestions.style.display = 'none';
+                    };
+                    topicSuggestions.appendChild(div);
+                });
+                topicSuggestions.style.display = 'block';
+            } else {
+                topicSuggestions.style.display = 'none';
+            }
+        }
+
+        function searchTopic(topicText) {
+            const query = encodeURIComponent(topicText);
+            const url = `https://www.geeksforgeeks.org/search/?q=${query}`;
+            window.open(url, '_blank');
+        }
+
+        function togglePriority(topicId, subject) {
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isHighPriority = !topic.isHighPriority;
+            updateSubjectList();
+            saveToLocalStorage();
+        }
+
+        function addTopic() {
+            const subjectSelector = document.getElementById('subjectSelector');
+            const topicInput = document.getElementById('topicInput');
+            const targetTimeInput = document.getElementById('targetTime');
+            const subject = subjectSelector.value;
+            const topicText = topicInput.value.trim();
+            let targetTime = parseInt(targetTimeInput.value);
+
+            if (topicText === '') {
+                alert('Please enter a topic!');
+                return;
+            }
+            if (isNaN(targetTime) || targetTime <= 0) {
+                alert('Please enter a valid target time (greater than 0 minutes)!');
+                return;
+            }
+
+            for (const [topic, time] of Object.entries(predefinedTimes)) {
+                if (topicText.toLowerCase().includes(topic.toLowerCase())) {
+                    targetTime = targetTime || time;
+                    break;
+                }
+            }
+            targetTime = targetTime || predefinedTimes["Default"];
+
+            const topicId = Date.now();
+            const topicData = { id: topicId, text: topicText, subject, targetTime, isHighPriority: false };
+
+            if (!topicsBySubject.has(subject)) {
+                topicsBySubject.set(subject, []);
+            }
+            topicsBySubject.get(subject).push(topicData);
+            topicTimes.set(topicId, 0);
+            targetTimes.set(topicId, targetTime * 60);
+
+            updateSubjectList();
+            updateTopicSelector();
+            topicInput.value = '';
+            targetTimeInput.value = predefinedTimes["Default"];
+            document.getElementById('topicSuggestions').style.display = 'none';
+            saveToLocalStorage();
+        }
+
+        function toggleComplete(topicId) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            const span = li.querySelector('span');
+            if (!span.classList.contains('completed')) {
+                completedTopics++;
+            } else {
+                completedTopics--;
+            }
+            span.classList.toggle('completed');
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function deleteTopic(topicId, subject) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            if (li.querySelector('span').classList.contains('completed')) {
+                completedTopics--;
+            }
+            topicsBySubject.set(subject, topicsBySubject.get(subject).filter(t => t.id !== topicId));
+            topicTimes.delete(topicId);
+            targetTimes.delete(topicId);
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Topics Completed: ${completedTopics}`;
+        }
+
+        function updateSubjectList() {
+            const subjectList = document.getElementById('subjectList');
+            subjectList.innerHTML = '';
+            topicsBySubject.forEach((topics, subject) => {
+                const div = document.createElement('div');
+                div.className = 'subject-group';
+                div.innerHTML = `<h3>${subject}</h3>`;
+                const ul = document.createElement('ul');
+                topics.sort((a, b) => {
+                    if (a.isHighPriority === b.isHighPriority) return b.id - a.id;
+                    return b.isHighPriority ? 1 : -1;
+                });
+                topics.forEach(topic => {
+                    const timeSpent = Math.round(topicTimes.get(topic.id) / 60);
+                    const targetTime = targetTimes.get(topic.id) / 60;
+                    const timeDiff = targetTime - timeSpent;
+                    const isOvertime = timeDiff < 0;
+                    ul.innerHTML += `
+                        <li data-topic-id="${topic.id}" class="${topic.isHighPriority ? 'high-priority' : ''}">
+                            <span onclick="toggleComplete(${topic.id})">${topic.text}</span>
+                            <span class="time-info ${isOvertime ? 'overtime' : ''}">
+                                Target: ${targetTime} min | Spent: ${timeSpent} min | Diff: ${timeDiff.toFixed(1)} min
+                            </span>
+                            <div>
+                                <label style="font-size: 0.9em; margin-right: 10px;">
+                                    <input type="checkbox" ${topic.isHighPriority ? 'checked' : ''} 
+                                    onchange="togglePriority(${topic.id}, '${subject}')" aria-label="Mark as high priority"> High Priority
+                                </label>
+                                <button class="search-btn" onclick="searchTopic('${topic.text}')" aria-label="Search topic on GeeksforGeeks">Search Topic</button>
+                                <button class="delete-btn" onclick="deleteTopic(${topic.id}, '${subject}')" aria-label="Delete topic">Delete</button>
+                            </div>
+                        </li>
+                    `;
+                });
+                div.appendChild(ul);
+                subjectList.appendChild(div);
+            });
+        }
+
+        function updateTopicSelector() {
+            const topicSelector = document.getElementById('topicSelector');
+            topicSelector.innerHTML = '<option value="">Select a topic</option>';
+            topicsBySubject.forEach((topics, subject) => {
+                topics.forEach(topic => {
+                    const option = document.createElement('option');
+                    option.value = topic.id;
+                    option.textContent = `${subject}: ${topic.text}`;
+                    topicSelector.appendChild(option);
+                });
+            });
+        }
+
+        function toggleFocusMode() {
+            const focusContainer = document.getElementById('focusContainer');
+            focusContainer.classList.toggle('active');
+            if (focusContainer.classList.contains('active')) {
+                updateTimerSettings();
+            }
+        }
+
+        function updateTimerSettings() {
+            const workInput = parseInt(document.getElementById('workTime').value);
+            const breakInput = parseInt(document.getElementById('breakTime').value);
+            if (isNaN(workInput) || workInput <= 0) {
+                alert('Work time must be greater than 0 minutes!');
+                document.getElementById('workTime').value = 25;
+                workTime = 25 * 60;
+            } else {
+                workTime = workInput * 60;
+            }
+            if (isNaN(breakInput) || breakInput <= 0) {
+                alert('Break time must be greater than 0 minutes!');
+                document.getElementById('breakTime').value = 5;
+                breakTime = 5 * 60;
+            } else {
+                breakTime = breakInput * 60;
+            }
+            timeLeft = workTime;
+            updateTimerDisplay();
+        }
+
+        function startTimer() {
+            updateTimerSettings();
+            const topicSelector = document.getElementById('topicSelector');
+            currentTopic = topicSelector.value;
+            if (!currentTopic) {
+                alert('Please select a topic to track time!');
+                return;
+            }
+            if (!timerInterval) {
+                let lastUpdate = Date.now();
+                timerInterval = setInterval(() => {
+                    const now = Date.now();
+                    if (isWorking && now - lastUpdate >= 60000) { // Update every minute
+                        const currentTime = topicTimes.get(parseInt(currentTopic)) || 0;
+                        topicTimes.set(parseInt(currentTopic), currentTime + 60);
+                        updateSubjectList();
+                        saveToLocalStorage();
+                        lastUpdate = now;
+                    }
+                    if (timeLeft <= 0) {
+                        isWorking = !isWorking;
+                        timeLeft = isWorking ? workTime : breakTime;
+                        alert(isWorking ? 'Work session done! Take a break.' : 'Break over! Start studying.');
+                    }
+                    updateTimerDisplay();
+                    timeLeft--;
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            updateTimerSettings();
+            isWorking = true;
+            currentTopic = null;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+    </script>
+</body>
+</html> 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGNOU MCA 2nd Semester Exam Prep</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            padding: 15px; 
+            background: #f5f7fa; 
+        }
+        h1 { text-align: center; color: #1a237e; }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        input[type="text"], input[type="number"], select { 
+            padding: 10px; 
+            margin: 5px 0; 
+            border: 1px solid #bbdefb; 
+            border-radius: 4px; 
+        }
+        input[type="text"] { width: 50%; }
+        input[type="number"] { width: 80px; }
+        select { width: 180px; }
+        button { 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            transition: background-color 0.2s; 
+        }
+        button:focus, input:focus, select:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        .add-btn { background: #3f51b5; color: white; }
+        .add-btn:hover { background: #303f9f; }
+        .focus-btn { background: #0288d1; color: white; }
+        .focus-btn:hover { background: #0277bd; }
+        .syllabus-btn { background: #7b1fa2; color: white; }
+        .syllabus-btn:hover { background: #6a1b9a; }
+        .search-btn { background: #4caf50; color: white; padding: 5px 10px; }
+        .search-btn:hover { background: #388e3c; }
+        .delete-btn { background: #d32f2f; color: white; padding: 5px 10px; }
+        .delete-btn:hover { background: #b71c1c; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            padding: 12px; 
+            margin: 8px 0; 
+            background: #f5f7ff; 
+            border-radius: 4px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .high-priority { background: #fff9c4; font-weight: bold; }
+        .highlighted { background: #ffe0b2; }
+        .completed { text-decoration: line-through; color: #555; }
+        #focusContainer { 
+            text-align: center; 
+            padding: 15px; 
+            background: #e3f2fd; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #focusContainer.active { display: block; }
+        #syllabusContainer { 
+            padding: 15px; 
+            background: #e8eaf6; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #syllabusContainer.active { display: block; }
+        #syllabusContainer h3 { color: #1a237e; margin-top: 0; }
+        #syllabusContainer ul { list-style-type: disc; padding-left: 20px; }
+        #syllabusContainer li { 
+            background: none; 
+            padding: 5px; 
+            margin: 5px 0; 
+            display: block; 
+        }
+        #timer { font-size: 2.5em; color: #d81b60; margin: 10px 0; }
+        .timer-btn { background: #ffca28; color: #333; margin: 5px; }
+        .timer-btn:hover { background: #ffb300; }
+        #progress { text-align: center; color: #1a237e; margin-top: 10px; }
+        .timer-input { width: 80px; }
+        .time-info { font-size: 0.9em; color: #444; margin-left: 10px; }
+        .overtime { color: #d32f2f; font-weight: bold; }
+        .subject-group { margin: 20px 0; }
+        .subject-group h3 { color: #0288d1; margin-bottom: 10px; }
+        #topicInput { position: relative; }
+        #topicSuggestions { 
+            position: absolute; 
+            background: white; 
+            border: 1px solid #bbdefb; 
+            width: 50%; 
+            max-height: 150px; 
+            overflow-y: auto; 
+            z-index: 10; 
+            display: none; 
+        }
+        #topicSuggestions div { padding: 10px; cursor: pointer; }
+        #topicSuggestions div:hover { background: #e3f2fd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IGNOU MCA 2nd Semester Exam Prep</h1>
+        <label>Subject: 
+            <select id="subjectSelector" aria-label="Select subject" onchange="updateSyllabusDisplay()">
+                <option value="MCS212">MCS212 (Discrete Mathematics)</option>
+                <option value="MCS218">MCS218 (Data Communication and Computer Networks)</option>
+                <option value="MCS219">MCS219 (Object-Oriented Analysis and Design)</option>
+                <option value="MCS220">MCS220 (Web Technologies)</option>
+                <option value="MCS221">MCS221 (Data Warehousing and Data Mining)</option>
+                <option value="MCSL222">MCSL222 (OOAD and Web Technologies Lab)</option>
+                <option value="MCSL223">MCSL223 (Computer Network and Data Mining Lab)</option>
+            </select>
+        </label>
+        <button class="syllabus-btn" onclick="toggleSyllabus()" aria-label="Toggle syllabus display" aria-expanded="false">View Syllabus</button>
+        <div id="syllabusContainer" aria-hidden="true">
+            <h3 id="syllabusTitle">Syllabus for MCS212 (Discrete Mathematics)</h3>
+            <ul id="syllabusList"></ul>
+        </div>
+        <div style="position: relative;">
+            <input type="text" id="topicInput" placeholder="Add topic (e.g., Graph Theory)" oninput="suggestTopics()" aria-label="Enter topic name">
+            <div id="topicSuggestions"></div>
+        </div>
+        <input type="number" id="targetTime" placeholder="Target time (min)" min="1" value="60" aria-label="Target time in minutes">
+        <button class="add-btn" onclick="addTopic()" aria-label="Add new topic">Add Topic</button>
+        <button class="focus-btn" onclick="toggleFocusMode()" aria-label="Toggle focus mode">Focus Mode</button>
+        <div id="focusContainer" class="focus-container">
+            <h2>Focus Mode (Pomodoro)</h2>
+            <label>Work Time (min): <input type="number" id="workTime" value="25" min="1" class="timer-input" aria-label="Work time in minutes"></label>
+            <label>Break Time (min): <input type="number" id="breakTime" value="5" min="1" class="timer-input" aria-label="Break time in minutes"></label>
+            <label>Select Topic: 
+                <select id="topicSelector" aria-label="Select topic for focus mode">
+                    <option value="">Select a topic</option>
+                </select>
+            </label>
+            <div id="timer">25:00</div>
+            <button class="timer-btn" onclick="startTimer()" aria-label="Start Pomodoro timer">Start Focus</button>
+            <button class="timer-btn" onclick="resetTimer()" aria-label="Reset Pomodoro timer">Reset</button>
+        </div>
+        <div id="progress">Topics Completed: 0</div>
+        <div id="subjectList"></div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 25 * 60; // Default 25 minutes in seconds
+        let isWorking = true;
+        let completedTopics = 0;
+        let workTime = 25 * 60; // Default work time
+        let breakTime = 5 * 60; // Default break time
+        let currentTopic = null;
+        const topicTimes = new Map(); // Track time spent per topic
+        const targetTimes = new Map(); // Track target time per topic
+        const topicsBySubject = new Map(); // Track topics per subject
+
+        // Predefined target times based on syllabus
+        const predefinedTimes = {
+            // MCS212: Discrete Mathematics (retained as no syllabus provided)
+            "Sets, Relations, Functions": 60,
+            "Logic and Propositional Calculus": 90,
+            "Combinatorics": 60,
+            "Graph Theory": 120,
+            "Boolean Algebra": 90,
+            // MCS218: Data Communication and Computer Networks
+            "Data Transmission Basics & Transmission Media": 90,
+            "Data Encoding and Multiplexing": 90,
+            "Multiplexing and Switching": 90,
+            "Data Link Layer Fundamentals": 90,
+            "Retransmission Strategies": 60,
+            "Contention-Based Media Access Protocols": 60,
+            "Wireless LAN and Datalink Layer Switching": 90,
+            "Network Layer Functionality and Design Issues": 90,
+            "Routing Algorithms": 90,
+            "Congestion Control Algorithms": 60,
+            "Transport Services and Mechanism": 90,
+            "TCP/UDP": 90,
+            "Network Security-I": 90,
+            "Network Security-II": 90,
+            // MCS219: Object-Oriented Analysis and Design
+            "Introduction to Object Oriented Modeling": 90,
+            "Structural Modeling Using UML": 90,
+            "Behavioral Modeling Using UML": 90,
+            "Advanced Behavioral Modeling Using UML": 90,
+            "Architecture Model": 90,
+            "Object Modeling": 90,
+            "Dynamic Modeling": 90,
+            "Functional Modeling": 90,
+            "Basics of System Design": 90,
+            "Object Design": 90,
+            "Advance Object Design": 90,
+            "Implementation Strategies-1": 60,
+            "Implementation Strategies-2": 60,
+            "Objects Mapping with Databases": 90,
+            // MCS220: Web Technologies
+            "Introduction to J2EE Architecture and Design": 90,
+            "Basics of Servlet": 90,
+            "Session Management and Database Connectivity in Servlet": 90,
+            "Java Server Pages": 90,
+            "Introduction to J2EE Frameworks": 90,
+            "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate": 90,
+            "Spring MVC Concepts": 90,
+            "Spring MVC with Bootstrap CSS": 90,
+            "Introduction to Spring Boot": 90,
+            "Configuration of Hibernate (ORM)": 90,
+            "CRUD Application Using Spring Boot and Hibernate": 90,
+            "Spring Security Configuration": 90,
+            "Custom Login Using Security": 60,
+            "Role Based Login": 60,
+            // MCS221: Data Warehousing and Data Mining
+            "Fundamentals of Data Warehouse": 90,
+            "Data Warehouse Architecture": 90,
+            "Dimensional Modeling": 90,
+            "Extract, Transform and Loading": 90,
+            "Introduction to Online Analytical Processing": 90,
+            "Trends in Data Warehouse": 90,
+            "Data Mining - An Introduction": 90,
+            "Data Preprocessing": 60,
+            "Mining Frequent Patterns and Associations": 90,
+            "Classification": 90,
+            "Clustering": 90,
+            "Text and Web Mining": 90,
+            // MCSL222: OOAD and Web Technologies Lab
+            "UML Diagrams Practice": 120,
+            "Servlet Project Creation": 90,
+            "JSP Project Creation": 90,
+            "Spring MVC, Bootstrap, Hibernate CRUD Project": 120,
+            "Maven and Framework for J2EE": 90,
+            "Dependency Injection and Controller": 90,
+            "Form Validation, Bootstrap and CSS": 90,
+            "Hibernate and JPA": 90,
+            "Spring Boot and REST Controller": 90,
+            "REST API, Spring Security, Actuator": 90,
+            "Bootstrap, Role-Based Authentication and CSRF": 90,
+            // MCSL223: Computer Network and Data Mining Lab
+            "Introduction to NS-3 and Network Simulations": 120,
+            "Data Mining with WEKA": 120,
+            "Attribute Selection in WEKA": 60,
+            "Association Rule Mining Lab": 90,
+            "Classification Lab": 90,
+            "Clustering Lab": 90,
+            "Lab Report Writing": 60,
+            "Default": 60
+        };
+
+        // Syllabus data for display
+        const syllabusData = {
+            MCS212: [
+                { unit: "Sets, Relations, Functions", description: "Basics of set theory, relations, and functions." },
+                { unit: "Logic and Propositional Calculus", description: "Propositional logic, truth tables, and logical equivalences." },
+                { unit: "Combinatorics", description: "Counting principles, permutations, and combinations." },
+                { unit: "Graph Theory", description: "Graphs, trees, and graph algorithms." },
+                { unit: "Boolean Algebra", description: "Boolean functions, logic gates, and minimization techniques." }
+            ],
+            MCS218: [
+                { unit: "Data Transmission Basics & Transmission Media", description: "Channel, baud, bandwidth, frequency, modes of transmission, impairments, guided and unguided media." },
+                { unit: "Data Encoding and Multiplexing", description: "Analog and digital modulation techniques, digital encoding, frequency and time division multiplexing." },
+                { unit: "Multiplexing and Switching", description: "FDM, TDM, DSL, circuit and packet switching." },
+                { unit: "Data Link Layer Fundamentals", description: "Framing, error detection, CRC, flow control." },
+                { unit: "Retransmission Strategies", description: "Stop & Wait ARQ, Go-Back-N ARQ, Selective Repeat ARQ, pipelining, piggybacking." },
+                { unit: "Contention-Based Media Access Protocols", description: "Pure ALOHA, Slotted ALOHA, CSMA, CSMA/CD, Ethernet (IEEE 802.3)." },
+                { unit: "Wireless LAN and Datalink Layer Switching", description: "IEEE 802.11, hidden/exposed station problems, MACA/MACAW, bridges." },
+                { unit: "Network Layer Functionality and Design Issues", description: "Services, packet switching, IP addressing, congestion, routing, delays." },
+                { unit: "Routing Algorithms", description: "Flooding, shortest path, distance vector, link state, hierarchical routing, IP protocols." },
+                { unit: "Congestion Control Algorithms", description: "Congestion causes, prevention, open-loop control, traffic shaping." },
+                { unit: "Transport Services and Mechanism", description: "Transport layer services, addressing, multiplexing, flow control, connection management." },
+                { unit: "TCP/UDP", description: "TCP and UDP services, segment headers, connection management, flow and congestion control." },
+                { unit: "Network Security-I", description: "Cryptography, symmetric and public key algorithms (RSA, Diffie-Hellman, DSA)." },
+                { unit: "Network Security-II", description: "Cyber threats, attacks (DoS, phishing, malware), countermeasures, firewalls, IDS." }
+            ],
+            MCS219: [
+                { unit: "Introduction to Object Oriented Modeling", description: "Object orientation principles: abstraction, encapsulation, inheritance, polymorphism." },
+                { unit: "Structural Modeling Using UML", description: "Classes, relationships, class diagrams, advanced structural modeling." },
+                { unit: "Behavioral Modeling Using UML", description: "Interactions, use cases, sequence and collaboration diagrams, activity diagrams." },
+                { unit: "Advanced Behavioral Modeling Using UML", description: "Events, signals, state machines, processes, threads, time and space." },
+                { unit: "Architecture Model", description: "Logical and physical architecture, component and deployment diagrams." },
+                { unit: "Object Modeling", description: "Aggregation, abstract classes, multiple inheritance, generalization, constraints." },
+                { unit: "Dynamic Modeling", description: "Events, state diagrams, concurrency, advanced dynamic modeling." },
+                { unit: "Functional Modeling", description: "Data flow diagrams, processes, actors, data stores, control flows." },
+                { unit: "Basics of System Design", description: "OO analysis to design, subsystems, coupling, cohesion, concurrency." },
+                { unit: "Object Design", description: "Design steps, algorithms, data structures, operations, optimization." },
+                { unit: "Advance Object Design", description: "Control implementation, inheritance adjustment, association design." },
+                { unit: "Implementation Strategies-1", description: "Mapping design to code, class definitions, association implementations." },
+                { unit: "Implementation Strategies-2", description: "Methods from collaboration diagrams, constraints, state charts, persistency." },
+                { unit: "Objects Mapping with Databases", description: "Relational database schema, object-to-table mapping, associations, generalizations." }
+            ],
+            MCS220: [
+                { unit: "Introduction to J2EE Architecture and Design", description: "Web servers, J2EE overview, design patterns (MVC, Singleton, Factory)." },
+                { unit: "Basics of Servlet", description: "Servlet architecture, life cycle, HTTP protocol, creating and deploying servlets." },
+                { unit: "Session Management and Database Connectivity in Servlet", description: "HttpSession, cookies, URL rewriting, database operations." },
+                { unit: "Java Server Pages", description: "JSP life cycle, API, directives, scripting elements, implicit objects, JSTL." },
+                { unit: "Introduction to J2EE Frameworks", description: "Struts, Spring, Hibernate, annotations, JPA overview." },
+                { unit: "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate", description: "Struts2, Spring MVC, Spring Boot, Hibernate features, comparisons." },
+                { unit: "Spring MVC Concepts", description: "Setup, IoC, dependency injection, controllers, views, request mapping." },
+                { unit: "Spring MVC with Bootstrap CSS", description: "Bootstrap configuration, custom CSS, Hibernate integration, CRUD operations." },
+                { unit: "Introduction to Spring Boot", description: "Spring Boot starters, DevTools, Actuator, application properties, Thymeleaf." },
+                { unit: "Configuration of Hibernate (ORM)", description: "Hibernate setup, annotations, CRUD features, HQL." },
+                { unit: "CRUD Application Using Spring Boot and Hibernate", description: "Spring Data repositories, association mappings, CRUD examples." },
+                { unit: "Spring Security Configuration", description: "Web security, JCA, JSSE, Spring Security setup, controllers." },
+                { unit: "Custom Login Using Security", description: "Custom login forms, Spring configuration, integration testing." },
+                { unit: "Role Based Login", description: "User roles, access restrictions, JSP taglibs, CSRF protection." }
+            ],
+            MCS221: [
+                { unit: "Fundamentals of Data Warehouse", description: "Evolution, need, design approaches, OLTP vs. OLAP, metadata." },
+                { unit: "Data Warehouse Architecture", description: "Architecture types, components, layers, data marts." },
+                { unit: "Dimensional Modeling", description: "Facts, dimensions, star and snowflake schemas, aggregate tables." },
+                { unit: "Extract, Transform and Loading", description: "ETL process, data extraction, transformation, loading, ELT." },
+                { unit: "Introduction to Online Analytical Processing", description: "OLAP characteristics, multidimensional analysis, hypercubes." },
+                { unit: "Trends in Data Warehouse", description: "Data lakes, cloud warehousing, real-time warehousing, Hadoop." },
+                { unit: "Data Mining - An Introduction", description: "Data mining purpose, types, tools, applications." },
+                { unit: "Data Preprocessing", description: "Data cleaning, reduction, handling missing values, noisy data." },
+                { unit: "Mining Frequent Patterns and Associations", description: "Association rule mining, Apriori algorithm, multilevel rules." },
+                { unit: "Classification", description: "Classification techniques, decision trees, classifier evaluation." },
+                { unit: "Clustering", description: "Clustering methods and applications." },
+                { unit: "Text and Web Mining", description: "Text analysis, web content, structure, and usage mining." }
+            ],
+            MCSL222: [
+                { unit: "UML Diagrams Practice", description: "Creating UML diagrams using tools, practice exercises." },
+                { unit: "Servlet Project Creation", description: "Setting up and developing servlet-based projects." },
+                { unit: "JSP Project Creation", description: "Building JSP-based web applications." },
+                { unit: "Spring MVC, Bootstrap, Hibernate CRUD Project", description: "Developing a CRUD application with Spring MVC, Bootstrap, Hibernate." },
+                { unit: "Maven and Framework for J2EE", description: "Using Maven for J2EE project setup and management." },
+                { unit: "Dependency Injection and Controller", description: "Implementing dependency injection and controllers in Spring." },
+                { unit: "Form Validation, Bootstrap and CSS", description: "Form validation, styling with Bootstrap and custom CSS." },
+                { unit: "Hibernate and JPA", description: "Hibernate setup, JPA-based database operations." },
+                { unit: "Spring Boot and REST Controller", description: "Building REST APIs with Spring Boot." },
+                { unit: "REST API, Spring Security, Actuator", description: "Implementing REST APIs, security, and actuator endpoints." },
+                { unit: "Bootstrap, Role-Based Authentication and CSRF", description: "Role-based authentication, CSRF protection, Bootstrap UI." }
+            ],
+            MCSL223: [
+                { unit: "Introduction to NS-3 and Network Simulations", description: "Setting up NS-3, running network simulations." },
+                { unit: "Data Mining with WEKA", description: "Using WEKA for data mining tasks." },
+                { unit: "Attribute Selection in WEKA", description: "Attribute selection techniques in WEKA." },
+                { unit: "Association Rule Mining Lab", description: "Implementing association rule mining in WEKA." },
+                { unit: "Classification Lab", description: "Performing classification tasks in WEKA." },
+                { unit: "Clustering Lab", description: "Clustering experiments using WEKA." },
+                { unit: "Lab Report Writing", description: "Writing reports for lab experiments." }
+            ]
+        };
+
+        // Load data from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            updateSyllabusDisplay();
+        });
+
+        function saveToLocalStorage() {
+            localStorage.setItem('topicsBySubject', JSON.stringify([...topicsBySubject]));
+            localStorage.setItem('topicTimes', JSON.stringify([...topicTimes]));
+            localStorage.setItem('targetTimes', JSON.stringify([...targetTimes]));
+            localStorage.setItem('completedTopics', completedTopics);
+        }
+
+        function loadFromLocalStorage() {
+            const savedTopics = localStorage.getItem('topicsBySubject');
+            const savedTimes = localStorage.getItem('topicTimes');
+            const savedTargets = localStorage.getItem('targetTimes');
+            const savedCompleted = localStorage.getItem('completedTopics');
+
+            if (savedTopics) {
+                topicsBySubject.clear();
+                JSON.parse(savedTopics).forEach(([subject, topics]) => topicsBySubject.set(subject, topics));
+            }
+            if (savedTimes) {
+                topicTimes.clear();
+                JSON.parse(savedTimes).forEach(([id, time]) => topicTimes.set(parseInt(id), time));
+            }
+            if (savedTargets) {
+                targetTimes.clear();
+                JSON.parse(savedTargets).forEach(([id, time]) => targetTimes.set(parseInt(id), time));
+            }
+            if (savedCompleted) {
+                completedTopics = parseInt(savedCompleted);
+            }
+
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+        }
+
+        function toggleSyllabus() {
+            const syllabusContainer = document.getElementById('syllabusContainer');
+            const syllabusBtn = document.querySelector('.syllabus-btn');
+            const isActive = syllabusContainer.classList.toggle('active');
+            syllabusContainer.setAttribute('aria-hidden', !isActive);
+            syllabusBtn.setAttribute('aria-expanded', isActive);
+            syllabusBtn.textContent = isActive ? 'Hide Syllabus' : 'View Syllabus';
+        }
+
+        function toggleHighlight(topicId, subject) {
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isHighlighted = !topic.isHighlighted;
+            updateSubjectList();
+            saveToLocalStorage();
+        }
+
+        function updateSyllabusDisplay() {
+            const subject = document.getElementById('subjectSelector').value;
+            const syllabusTitle = document.getElementById('syllabusTitle');
+            const syllabusList = document.getElementById('syllabusList');
+            const subjectName = document.getElementById('subjectSelector').options[document.getElementById('subjectSelector').selectedIndex].text;
+
+            syllabusTitle.textContent = `Syllabus for ${subjectName}`;
+            syllabusList.innerHTML = '';
+            syllabusData[subject].forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.unit}</strong>: ${item.description}`;
+                syllabusList.appendChild(li);
+            });
+        }
+
+        function suggestTopics() {
+            const topicInput = document.getElementById('topicInput');
+            const topicSuggestions = document.getElementById('topicSuggestions');
+            const subject = document.getElementById('subjectSelector').value;
+            const query = topicInput.value.trim().toLowerCase();
+            topicSuggestions.innerHTML = '';
+            if (query.length < 2) {
+                topicSuggestions.style.display = 'none';
+                return;
+            }
+
+            const subjectTopics = Object.keys(predefinedTimes).filter(topic => 
+                syllabusData[subject].some(item => item.unit === topic)
+            );
+
+            const matches = subjectTopics.filter(topic => 
+                topic.toLowerCase().includes(query)
+            );
+            if (matches.length > 0) {
+                matches.forEach(topic => {
+                    const div = document.createElement('div');
+                    div.textContent = `${topic} (${predefinedTimes[topic]} min)`;
+                    div.onclick = () => {
+                        topicInput.value = topic;
+                        document.getElementById('targetTime').value = predefinedTimes[topic];
+                        topicSuggestions.style.display = 'none';
+                    };
+                    topicSuggestions.appendChild(div);
+                });
+                topicSuggestions.style.display = 'block';
+            } else {
+                topicSuggestions.style.display = 'none';
+            }
+        }
+
+        function searchTopic(topicText) {
+            const query = encodeURIComponent(topicText);
+            const url = `https://www.geeksforgeeks.org/search/?q=${query}`;
+            window.open(url, '_blank');
+        }
+
+        function togglePriority(topicId, subject) {
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isHighPriority = !topic.isHighPriority;
+            updateSubjectList();
+            saveToLocalStorage();
+        }
+
+        function addTopic() {
+            const subjectSelector = document.getElementById('subjectSelector');
+            const topicInput = document.getElementById('topicInput');
+            const targetTimeInput = document.getElementById('targetTime');
+            const subject = subjectSelector.value;
+            const topicText = topicInput.value.trim();
+            let targetTime = parseInt(targetTimeInput.value);
+
+            if (topicText === '') {
+                alert('Please enter a topic!');
+                return;
+            }
+            if (isNaN(targetTime) || targetTime <= 0) {
+                alert('Please enter a valid target time (greater than 0 minutes)!');
+                return;
+            }
+
+            for (const [topic, time] of Object.entries(predefinedTimes)) {
+                if (topicText.toLowerCase().includes(topic.toLowerCase())) {
+                    targetTime = targetTime || time;
+                    break;
+                }
+            }
+            targetTime = targetTime || predefinedTimes["Default"];
+
+            const topicId = Date.now();
+            const topicData = { 
+                id: topicId, 
+                text: topicText, 
+                subject, 
+                targetTime, 
+                isHighPriority: false, 
+                isHighlighted: false 
+            };
+
+            if (!topicsBySubject.has(subject)) {
+                topicsBySubject.set(subject, []);
+            }
+            topicsBySubject.get(subject).push(topicData);
+            topicTimes.set(topicId, 0);
+            targetTimes.set(topicId, targetTime * 60);
+
+            updateSubjectList();
+            updateTopicSelector();
+            topicInput.value = '';
+            targetTimeInput.value = predefinedTimes["Default"];
+            document.getElementById('topicSuggestions').style.display = 'none';
+            saveToLocalStorage();
+        }
+
+        function toggleComplete(topicId) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            const span = li.querySelector('span');
+            if (!span.classList.contains('completed')) {
+                completedTopics++;
+            } else {
+                completedTopics--;
+            }
+            span.classList.toggle('completed');
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function deleteTopic(topicId, subject) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            if (li.querySelector('span').classList.contains('completed')) {
+                completedTopics--;
+            }
+            topicsBySubject.set(subject, topicsBySubject.get(subject).filter(t => t.id !== topicId));
+            topicTimes.delete(topicId);
+            targetTimes.delete(topicId);
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Topics Completed: ${completedTopics}`;
+        }
+
+        function updateSubjectList() {
+            const subjectList = document.getElementById('subjectList');
+            subjectList.innerHTML = '';
+            topicsBySubject.forEach((topics, subject) => {
+                const div = document.createElement('div');
+                div.className = 'subject-group';
+                div.innerHTML = `<h3>${subject}</h3>`;
+                const ul = document.createElement('ul');
+                topics.sort((a, b) => {
+                    if (a.isHighPriority === b.isHighPriority) return b.id - a.id;
+                    return b.isHighPriority ? 1 : -1;
+                });
+                topics.forEach(topic => {
+                    const timeSpent = Math.round(topicTimes.get(topic.id) / 60);
+                    const targetTime = targetTimes.get(topic.id) / 60;
+                    const timeDiff = targetTime - timeSpent;
+                    const isOvertime = timeDiff < 0;
+                    ul.innerHTML += `
+                        <li data-topic-id="${topic.id}" class="${topic.isHighPriority ? 'high-priority' : ''} ${topic.isHighlighted ? 'highlighted' : ''}">
+                            <span onclick="toggleComplete(${topic.id})">${topic.text}</span>
+                            <span class="time-info ${isOvertime ? 'overtime' : ''}">
+                                Target: ${targetTime} min | Spent: ${timeSpent} min | Diff: ${timeDiff.toFixed(1)} min
+                            </span>
+                            <div>
+                                <label style="font-size: 0.9em; margin-right: 10px;">
+                                    <input type="checkbox" ${topic.isHighPriority ? 'checked' : ''} 
+                                    onchange="togglePriority(${topic.id}, '${subject}')" aria-label="Mark ${topic.text} as high priority"> High Priority
+                                </label>
+                                <label style="font-size: 0.9em; margin-right: 10px;">
+                                    <input type="checkbox" ${topic.isHighlighted ? 'checked' : ''} 
+                                    onchange="toggleHighlight(${topic.id}, '${subject}')" aria-label="Highlight ${topic.text}" aria-checked="${topic.isHighlighted}"> Highlight
+                                </label>
+                                <button class="search-btn" onclick="searchTopic('${topic.text}')" aria-label="Search ${topic.text} on GeeksforGeeks">Search Topic</button>
+                                <button class="delete-btn" onclick="deleteTopic(${topic.id}, '${subject}')" aria-label="Delete ${topic.text}">Delete</button>
+                            </div>
+                        </li>
+                    `;
+                });
+                div.appendChild(ul);
+                subjectList.appendChild(div);
+            });
+        }
+
+        function updateTopicSelector() {
+            const topicSelector = document.getElementById('topicSelector');
+            topicSelector.innerHTML = '<option value="">Select a topic</option>';
+            topicsBySubject.forEach((topics, subject) => {
+                topics.forEach(topic => {
+                    const option = document.createElement('option');
+                    option.value = topic.id;
+                    option.textContent = `${subject}: ${topic.text}`;
+                    topicSelector.appendChild(option);
+                });
+            });
+        }
+
+        function toggleFocusMode() {
+            const focusContainer = document.getElementById('focusContainer');
+            focusContainer.classList.toggle('active');
+            if (focusContainer.classList.contains('active')) {
+                updateTimerSettings();
+            }
+        }
+
+        function updateTimerSettings() {
+            const workInput = parseInt(document.getElementById('workTime').value);
+            const breakInput = parseInt(document.getElementById('breakTime').value);
+            if (isNaN(workInput) || workInput <= 0) {
+                alert('Work time must be greater than 0 minutes!');
+                document.getElementById('workTime').value = 25;
+                workTime = 25 * 60;
+            } else {
+                workTime = workInput * 60;
+            }
+            if (isNaN(breakInput) || breakInput <= 0) {
+                alert('Break time must be greater than 0 minutes!');
+                document.getElementById('breakTime').value = 5;
+                breakTime = 5 * 60;
+            } else {
+                breakTime = breakInput * 60;
+            }
+            timeLeft = workTime;
+            updateTimerDisplay();
+        }
+
+        function startTimer() {
+            updateTimerSettings();
+            const topicSelector = document.getElementById('topicSelector');
+            currentTopic = topicSelector.value;
+            if (!currentTopic) {
+                alert('Please select a topic to track time!');
+                return;
+            }
+            if (!timerInterval) {
+                let lastUpdate = Date.now();
+                timerInterval = setInterval(() => {
+                    const now = Date.now();
+                    if (isWorking && now - lastUpdate >= 60000) { // Update every minute
+                        const currentTime = topicTimes.get(parseInt(currentTopic)) || 0;
+                        topicTimes.set(parseInt(currentTopic), currentTime + 60);
+                        updateSubjectList();
+                        saveToLocalStorage();
+                        lastUpdate = now;
+                    }
+                    if (timeLeft <= 0) {
+                        isWorking = !isWorking;
+                        timeLeft = isWorking ? workTime : breakTime;
+                        alert(isWorking ? 'Work session done! Take a break.' : 'Break over! Start studying.');
+                    }
+                    updateTimerDisplay();
+                    timeLeft--;
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            updateTimerSettings();
+            isWorking = true;
+            currentTopic = null;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timer').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+        }
+    </script>
+</body>
+</html> -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGNOU MCA 2nd Semester Exam Prep</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            max-width: 700px; 
+            margin: 20px auto; 
+            padding: 15px; 
+            background: #f5f7fa; 
+        }
+        h1 { text-align: center; color: #1a237e; }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+        }
+        input[type="text"], input[type="number"], select { 
+            padding: 10px; 
+            margin: 5px 0; 
+            border: 1px solid #bbdefb; 
+            border-radius: 4px; 
+        }
+        input[type="text"] { width: 50%; }
+        input[type="number"] { width: 80px; }
+        select { width: 180px; }
+        button { 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 14px; 
+            transition: background-color 0.2s; 
+        }
+        button:focus, input:focus, select:focus {
+            outline: 2px solid #007bff;
+            outline-offset: 2px;
+        }
+        .add-btn { background: #3f51b5; color: white; }
+        .add-btn:hover { background: #303f9f; }
+        .focus-btn { background: #0288d1; color: white; }
+        .focus-btn:hover { background: #0277bd; }
+        .syllabus-btn { background: #7b1fa2; color: white; }
+        .syllabus-btn:hover { background: #6a1b9a; }
+        .search-btn { background: #4caf50; color: white; padding: 5px 10px; }
+        .search-btn:hover { background: #388e3c; }
+        .delete-btn { background: #d32f2f; color: white; padding: 5px 10px; }
+        .delete-btn:hover { background: #b71c1c; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            padding: 12px; 
+            margin: 8px 0; 
+            background: #f5f7ff; 
+            border-radius: 4px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .high-priority { background: #fff9c4; font-weight: bold; }
+        .highlighted { background: #ffe0b2; }
+        .completed { text-decoration: line-through; color: #555; }
+        #focusContainer { 
+            text-align: center; 
+            padding: 15px; 
+            background: #e3f2fd; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #focusContainer.active { display: block; }
+        #syllabusContainer { 
+            padding: 15px; 
+            background: #e8eaf6; 
+            border-radius: 8px; 
+            margin: 15px 0; 
+            display: none; 
+        }
+        #syllabusContainer.active { display: block; }
+        #syllabusContainer h3 { color: #1a237e; margin-top: 0; }
+        #syllabusContainer ul { list-style-type: disc; padding-left: 20px; }
+        #syllabusContainer li { 
+            background: none; 
+            padding: 5px; 
+            margin: 5px 0; 
+            display: block; 
+        }
+        #timer { font-size: 2.5em; margin: 10px 0; }
+        .timer-btn { background: #ffca28; color: #333; margin: 5px; }
+        .timer-btn:hover:not(:disabled) { background: #ffb300; }
+        .timer-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+        #progress { text-align: center; color: #1a237e; margin-top: 10px; }
+        .timer-input { width: 80px; }
+        .time-info { font-size: 0.9em; color: #444; margin-left: 10px; }
+        .overtime { color: #d32f2f; font-weight: bold; }
+        .subject-group { margin: 20px 0; }
+        .subject-group h3 { color: #0288d1; margin-bottom: 10px; }
+        #topicInput { position: relative; }
+        #topicSuggestions { 
+            position: absolute; 
+            background: white; 
+            border: 1px solid #bbdefb; 
+            width: 50%; 
+            max-height: 150px; 
+            overflow-y: auto; 
+            z-index: 10; 
+            display: none; 
+        }
+        #topicSuggestions div { padding: 10px; cursor: pointer; }
+        #topicSuggestions div:hover { background: #e3f2fd; }
+        #breakNotification, #workNotification {
+            display: none;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+            text-align: center;
+            animation: fadeOut 3s forwards;
+        }
+        #workNotification {
+            background: #0288d1;
+            color: white;
+        }
+        #breakNotification {
+            background: #4caf50;
+            color: white;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+        #soundToggleLabel {
+            font-size: 0.9em;
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IGNOU MCA 2nd Semester Exam Prep</h1>
+        <label>Subject: 
+            <select id="subjectSelector" aria-label="Select subject" onchange="updateSyllabusDisplay()">
+                <option value="MCS212">MCS212 (Discrete Mathematics)</option>
+                <option value="MCS218">MCS218 (Data Communication and Computer Networks)</option>
+                <option value="MCS219">MCS219 (Object-Oriented Analysis and Design)</option>
+                <option value="MCS220">MCS220 (Web Technologies)</option>
+                <option value="MCS221">MCS221 (Data Warehousing and Data Mining)</option>
+                <option value="MCSL222">MCSL222 (OOAD and Web Technologies Lab)</option>
+                <option value="MCSL223">MCSL223 (Computer Network and Data Mining Lab)</option>
+            </select>
+        </label>
+        <button class="syllabus-btn" onclick="toggleSyllabus()" aria-label="Toggle syllabus display" aria-expanded="false">View Syllabus</button>
+        <div id="syllabusContainer" aria-hidden="true">
+            <h3 id="syllabusTitle">Syllabus for MCS212 (Discrete Mathematics)</h3>
+            <ul id="syllabusList"></ul>
+        </div>
+        <div style="position: relative;">
+            <input type="text" id="topicInput" placeholder="Add topic (e.g., Graph Theory)" oninput="suggestTopics()" aria-label="Enter topic name">
+            <div id="topicSuggestions"></div>
+        </div>
+        <input type="number" id="targetTime" placeholder="Target time (min)" min="1" value="60" aria-label="Target time in minutes">
+        <button class="add-btn" onclick="addTopic()" aria-label="Add new topic">Add Topic</button>
+        <button class="focus-btn" onclick="toggleFocusMode()" aria-label="Toggle focus mode">Focus Mode</button>
+        <div id="focusContainer" class="focus-container">
+            <h2>Focus Mode (Pomodoro)</h2>
+            <label>Work Time (min): <input type="number" id="workTime" value="25" min="1" class="timer-input" aria-label="Work time in minutes"></label>
+            <label>Break Time (min): <input type="number" id="breakTime" value="5" min="1" class="timer-input" aria-label="Break time in minutes"></label>
+            <label>Select Topic: 
+                <select id="topicSelector" aria-label="Select topic for focus mode">
+                    <option value="">Select a topic</option>
+                </select>
+            </label>
+            <label id="soundToggleLabel">
+                <input type="checkbox" id="soundToggle" checked onchange="toggleSound()" aria-label="Enable Pomodoro sound notifications" aria-checked="true"> Enable Sounds
+            </label>
+            <div id="workNotification" role="alert" aria-live="polite">Work session done!</div>
+            <div id="breakNotification" role="alert" aria-live="polite">Break time start now</div>
+            <div id="timer">25:00</div>
+            <button class="timer-btn" id="startBtn" onclick="startTimer()" aria-label="Start Pomodoro timer">Start Focus</button>
+            <button class="timer-btn" id="stopBtn" onclick="stopTimer()" aria-label="Stop Pomodoro timer" disabled>Stop Focus</button>
+            <button class="timer-btn" id="resetBtn" onclick="resetTimer()" aria-label="Reset Pomodoro timer">Reset</button>
+        </div>
+        <div id="progress">Topics Completed: 0</div>
+        <div id="subjectList"></div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 25 * 60; // Default 25 minutes in seconds
+        let isWorking = true;
+        let completedTopics = 0;
+        let workTime = 25 * 60; // Default work time
+        let breakTime = 5 * 60; // Default break time
+        let currentTopic = null;
+        let lastUpdate = null; // Track last time update
+        let soundEnabled = localStorage.getItem('soundEnabled') !== 'false'; // Load sound preference
+        const topicTimes = new Map(); // Track time spent per topic
+        const targetTimes = new Map(); // Track target time per topic
+        const topicsBySubject = new Map(); // Track topics per subject
+
+        // Predefined target times based on syllabus
+        const predefinedTimes = {
+            // MCS212: Discrete Mathematics
+            "Sets, Relations, Functions": 60,
+            "Logic and Propositional Calculus": 90,
+            "Combinatorics": 60,
+            "Graph Theory": 120,
+            "Boolean Algebra": 90,
+            // MCS218: Data Communication and Computer Networks
+            "Data Transmission Basics & Transmission Media": 90,
+            "Data Encoding and Multiplexing": 90,
+            "Multiplexing and Switching": 90,
+            "Data Link Layer Fundamentals": 90,
+            "Retransmission Strategies": 60,
+            "Contention-Based Media Access Protocols": 60,
+            "Wireless LAN and Datalink Layer Switching": 90,
+            "Network Layer Functionality and Design Issues": 90,
+            "Routing Algorithms": 90,
+            "Congestion Control Algorithms": 60,
+            "Transport Services and Mechanism": 90,
+            "TCP/UDP": 90,
+            "Network Security-I": 90,
+            "Network Security-II": 90,
+            // MCS219: Object-Oriented Analysis and Design
+            "Introduction to Object Oriented Modeling": 90,
+            "Structural Modeling Using UML": 90,
+            "Behavioral Modeling Using UML": 90,
+            "Advanced Behavioral Modeling Using UML": 90,
+            "Architecture Model": 90,
+            "Object Modeling": 90,
+            "Dynamic Modeling": 90,
+            "Functional Modeling": 90,
+            "Basics of System Design": 90,
+            "Object Design": 90,
+            "Advance Object Design": 90,
+            "Implementation Strategies-1": 60,
+            "Implementation Strategies-2": 60,
+            "Objects Mapping with Databases": 90,
+            // MCS220: Web Technologies
+            "Introduction to J2EE Architecture and Design": 90,
+            "Basics of Servlet": 90,
+            "Session Management and Database Connectivity in Servlet": 90,
+            "Java Server Pages": 90,
+            "Introduction to J2EE Frameworks": 90,
+            "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate": 90,
+            "Spring MVC Concepts": 90,
+            "Spring MVC with Bootstrap CSS": 90,
+            "Introduction to Spring Boot": 90,
+            "Configuration of Hibernate (ORM)": 90,
+            "CRUD Application Using Spring Boot and Hibernate": 90,
+            "Spring Security Configuration": 90,
+            "Custom Login Using Security": 60,
+            "Role Based Login": 60,
+            // MCS221: Data Warehousing and Data Mining
+            "Fundamentals of Data Warehouse": 90,
+            "Data Warehouse Architecture": 90,
+            "Dimensional Modeling": 90,
+            "Extract, Transform and Loading": 90,
+            "Introduction to Online Analytical Processing": 90,
+            "Trends in Data Warehouse": 90,
+            "Data Mining - An Introduction": 90,
+            "Data Preprocessing": 60,
+            "Mining Frequent Patterns and Associations": 90,
+            "Classification": 90,
+            "Clustering": 90,
+            "Text and Web Mining": 90,
+            // MCSL222: OOAD and Web Technologies Lab
+            "UML Diagrams Practice": 120,
+            "Servlet Project Creation": 90,
+            "JSP Project Creation": 90,
+            "Spring MVC, Bootstrap, Hibernate CRUD Project": 120,
+            "Maven and Framework for J2EE": 90,
+            "Dependency Injection and Controller": 90,
+            "Form Validation, Bootstrap and CSS": 90,
+            "Hibernate and JPA": 90,
+            "Spring Boot and REST Controller": 90,
+            "REST API, Spring Security, Actuator": 90,
+            "Bootstrap, Role-Based Authentication and CSRF": 90,
+            // MCSL223: Computer Network and Data Mining Lab
+            "Introduction to NS-3 and Network Simulations": 120,
+            "Data Mining with WEKA": 120,
+            "Attribute Selection in WEKA": 60,
+            "Association Rule Mining Lab": 90,
+            "Classification Lab": 90,
+            "Clustering Lab": 90,
+            "Lab Report Writing": 60,
+            "Default": 60
+        };
+
+        // Syllabus data for display
+        const syllabusData = {
+            MCS212: [
+                { unit: "Sets, Relations, Functions", description: "Basics of set theory, relations, and functions." },
+                { unit: "Logic and Propositional Calculus", description: "Propositional logic, truth tables, and logical equivalences." },
+                { unit: "Combinatorics", description: "Counting principles, permutations, and combinations." },
+                { unit: "Graph Theory", description: "Graphs, trees, and graph algorithms." },
+                { unit: "Boolean Algebra", description: "Boolean functions, logic gates, and minimization techniques." }
+            ],
+            MCS218: [
+                { unit: "Data Transmission Basics & Transmission Media", description: "Channel, baud, bandwidth, frequency, modes of transmission, impairments, guided and unguided media." },
+                { unit: "Data Encoding and Multiplexing", description: "Analog and digital modulation techniques, digital encoding, frequency and time division multiplexing." },
+                { unit: "Multiplexing and Switching", description: "FDM, TDM, DSL, circuit and packet switching." },
+                { unit: "Data Link Layer Fundamentals", description: "Framing, error detection, CRC, flow control." },
+                { unit: "Retransmission Strategies", description: "Stop & Wait ARQ, Go-Back-N ARQ, Selective Repeat ARQ, pipelining, piggybacking." },
+                { unit: "Contention-Based Media Access Protocols", description: "Pure ALOHA, Slotted ALOHA, CSMA, CSMA/CD, Ethernet (IEEE 802.3)." },
+                { unit: "Wireless LAN and Datalink Layer Switching", description: "IEEE 802.11, hidden/exposed station problems, MACA/MACAW, bridges." },
+                { unit: "Network Layer Functionality and Design Issues", description: "Services, packet switching, IP addressing, congestion, routing, delays." },
+                { unit: "Routing Algorithms", description: "Flooding, shortest path, distance vector, link state, hierarchical routing, IP protocols." },
+                { unit: "Congestion Control Algorithms", description: "Congestion causes, prevention, open-loop control, traffic shaping." },
+                { unit: "Transport Services and Mechanism", description: "Transport layer services, addressing, multiplexing, flow control, connection management." },
+                { unit: "TCP/UDP", description: "TCP and UDP services, segment headers, connection management, flow and congestion control." },
+                { unit: "Network Security-I", description: "Cryptography, symmetric and public key algorithms (RSA, Diffie-Hellman, DSA)." },
+                { unit: "Network Security-II", description: "Cyber threats, attacks (DoS, phishing, malware), countermeasures, firewalls, IDS." }
+            ],
+            MCS219: [
+                { unit: "Introduction to Object Oriented Modeling", description: "Object orientation principles: abstraction, encapsulation, inheritance, polymorphism." },
+                { unit: "Structural Modeling Using UML", description: "Classes, relationships, class diagrams, advanced structural modeling." },
+                { unit: "Behavioral Modeling Using UML", description: "Interactions, use cases, sequence and collaboration diagrams, activity diagrams." },
+                { unit: "Advanced Behavioral Modeling Using UML", description: "Events, signals, state machines, processes, threads, time and space." },
+                { unit: "Architecture Model", description: "Logical and physical architecture, component and deployment diagrams." },
+                { unit: "Object Modeling", description: "Aggregation, abstract classes, multiple inheritance, generalization, constraints." },
+                { unit: "Dynamic Modeling", description: "Events, state diagrams, concurrency, advanced dynamic modeling." },
+                { unit: "Functional Modeling", description: "Data flow diagrams, processes, actors, data stores, control flows." },
+                { unit: "Basics of System Design", description: "OO analysis to design, subsystems, coupling, cohesion, concurrency." },
+                { unit: "Object Design", description: "Design steps, algorithms, data structures, operations, optimization." },
+                { unit: "Advance Object Design", description: "Control implementation, inheritance adjustment, association design." },
+                { unit: "Implementation Strategies-1", description: "Mapping design to code, class definitions, association implementations." },
+                { unit: "Implementation Strategies-2", description: "Methods from collaboration diagrams, constraints, state charts, persistency." },
+                { unit: "Objects Mapping with Databases", description: "Relational database schema, object-to-table mapping, associations, generalizations." }
+            ],
+            MCS220: [
+                { unit: "Introduction to J2EE Architecture and Design", description: "Web servers, J2EE overview, design patterns (MVC, Singleton, Factory)." },
+                { unit: "Basics of Servlet", description: "Servlet architecture, life cycle, HTTP protocol, creating and deploying servlets." },
+                { unit: "Session Management and Database Connectivity in Servlet", description: "HttpSession, cookies, URL rewriting, database operations." },
+                { unit: "Java Server Pages", description: "JSP life cycle, API, directives, scripting elements, implicit objects, JSTL." },
+                { unit: "Introduction to J2EE Frameworks", description: "Struts, Spring, Hibernate, annotations, JPA overview." },
+                { unit: "Frameworks for J2EE Development - Struts, Spring Boot, Hibernate", description: "Struts2, Spring MVC, Spring Boot, Hibernate features, comparisons." },
+                { unit: "Spring MVC Concepts", description: "Setup, IoC, dependency injection, controllers, views, request mapping." },
+                { unit: "Spring MVC with Bootstrap CSS", description: "Bootstrap configuration, custom CSS, Hibernate integration, CRUD operations." },
+                { unit: "Introduction to Spring Boot", description: "Spring Boot starters, DevTools, Actuator, application properties, Thymeleaf." },
+                { unit: "Configuration of Hibernate (ORM)", description: "Hibernate setup, annotations, CRUD features, HQL." },
+                { unit: "CRUD Application Using Spring Boot and Hibernate", description: "Spring Data repositories, association mappings, CRUD examples." },
+                { unit: "Spring Security Configuration", description: "Web security, JCA, JSSE, Spring Security setup, controllers." },
+                { unit: "Custom Login Using Security", description: "Custom login forms, Spring configuration, integration testing." },
+                { unit: "Role Based Login", description: "User roles, access restrictions, JSP taglibs, CSRF protection." }
+            ],
+            MCS221: [
+                { unit: "Fundamentals of Data Warehouse", description: "Evolution, need, design approaches, OLTP vs. OLAP, metadata." },
+                { unit: "Data Warehouse Architecture", description: "Architecture types, components, layers, data marts." },
+                { unit: "Dimensional Modeling", description: "Facts, dimensions, star and snowflake schemas, aggregate tables." },
+                { unit: "Extract, Transform and Loading", description: "ETL process, data extraction, transformation, loading, ELT." },
+                { unit: "Introduction to Online Analytical Processing", description: "OLAP characteristics, multidimensional analysis, hypercubes." },
+                { unit: "Trends in Data Warehouse", description: "Data lakes, cloud warehousing, real-time warehousing, Hadoop." },
+                { unit: "Data Mining - An Introduction", description: "Data mining purpose, types, tools, applications." },
+                { unit: "Data Preprocessing", description: "Data cleaning, reduction, handling missing values, noisy data." },
+                { unit: "Mining Frequent Patterns and Associations", description: "Association rule mining, Apriori algorithm, multilevel rules." },
+                { unit: "Classification", description: "Classification techniques, decision trees, classifier evaluation." },
+                { unit: "Clustering", description: "Clustering methods and applications." },
+                { unit: "Text and Web Mining", description: "Text analysis, web content, structure, and usage mining." }
+            ],
+            MCSL222: [
+                { unit: "UML Diagrams Practice", description: "Creating UML diagrams using tools, practice exercises." },
+                { unit: "Servlet Project Creation", description: "Setting up and developing servlet-based projects." },
+                { unit: "JSP Project Creation", description: "Building JSP-based web applications." },
+                { unit: "Spring MVC, Bootstrap, Hibernate CRUD Project", description: "Developing a CRUD application with Spring MVC, Bootstrap, Hibernate." },
+                { unit: "Maven and Framework for J2EE", description: "Using Maven for J2EE project setup and management." },
+                { unit: "Dependency Injection and Controller", description: "Implementing dependency injection and controllers in Spring." },
+                { unit: "Form Validation, Bootstrap and CSS", description: "Form validation, styling with Bootstrap and custom CSS." },
+                { unit: "Hibernate and JPA", description: "Hibernate setup, JPA-based database operations." },
+                { unit: "Spring Boot and REST Controller", description: "Building REST APIs with Spring Boot." },
+                { unit: "REST API, Spring Security, Actuator", description: "Implementing REST APIs, security, and actuator endpoints." },
+                { unit: "Bootstrap, Role-Based Authentication and CSRF", description: "Role-based authentication, CSRF protection, Bootstrap UI." }
+            ],
+            MCSL223: [
+                { unit: "Introduction to NS-3 and Network Simulations", description: "Setting up NS-3, running network simulations." },
+                { unit: "Data Mining with WEKA", description: "Using WEKA for data mining tasks." },
+                { unit: "Attribute Selection in WEKA", description: "Attribute selection techniques in WEKA." },
+                { unit: "Association Rule Mining Lab", description: "Implementing association rule mining in WEKA." },
+                { unit: "Classification Lab", description: "Performing classification tasks in WEKA." },
+                { unit: "Clustering Lab", description: "Clustering experiments using WEKA." },
+                { unit: "Lab Report Writing", description: "Writing reports for lab experiments." }
+            ]
+        };
+
+        // Load data from localStorage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            updateSyllabusDisplay();
+            document.getElementById('soundToggle').checked = soundEnabled;
+            document.getElementById('soundToggle').setAttribute('aria-checked', soundEnabled);
+        });
+
+        function saveToLocalStorage() {
+            localStorage.setItem('topicsBySubject', JSON.stringify([...topicsBySubject]));
+            localStorage.setItem('topicTimes', JSON.stringify([...topicTimes]));
+            localStorage.setItem('targetTimes', JSON.stringify([...targetTimes]));
+            localStorage.setItem('completedTopics', completedTopics);
+            localStorage.setItem('soundEnabled', soundEnabled);
+        }
+
+        function loadFromLocalStorage() {
+            const savedTopics = localStorage.getItem('topicsBySubject');
+            const savedTimes = localStorage.getItem('topicTimes');
+            const savedTargets = localStorage.getItem('targetTimes');
+            const savedCompleted = localStorage.getItem('completedTopics');
+
+            if (savedTopics) {
+                topicsBySubject.clear();
+                JSON.parse(savedTopics).forEach(([subject, topics]) => topicsBySubject.set(subject, topics));
+            }
+            if (savedTimes) {
+                topicTimes.clear();
+                JSON.parse(savedTimes).forEach(([id, time]) => topicTimes.set(parseInt(id), time));
+            }
+            if (savedTargets) {
+                targetTimes.clear();
+                JSON.parse(savedTargets).forEach(([id, time]) => targetTimes.set(parseInt(id), time));
+            }
+            if (savedCompleted) {
+                completedTopics = parseInt(savedCompleted);
+            }
+
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+        }
+
+        function toggleSound() {
+            soundEnabled = document.getElementById('soundToggle').checked;
+            document.getElementById('soundToggle').setAttribute('aria-checked', soundEnabled);
+            saveToLocalStorage();
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = ctx.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(type === 'work' ? 800 : 600, ctx.currentTime);
+            oscillator.connect(ctx.destination);
+            oscillator.start();
+            oscillator.stop(ctx.currentTime + 0.2);
+        }
+
+        function toggleSyllabus() {
+            const syllabusContainer = document.getElementById('syllabusContainer');
+            const syllabusBtn = document.querySelector('.syllabus-btn');
+            const isActive = syllabusContainer.classList.toggle('active');
+            syllabusContainer.setAttribute('aria-hidden', !isActive);
+            syllabusBtn.setAttribute('aria-expanded', isActive);
+            syllabusBtn.textContent = isActive ? 'Hide Syllabus' : 'View Syllabus';
+        }
+
+        function toggleHighlight(topicId, subject) {
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isHighlighted = !topic.isHighlighted;
+            updateSubjectList();
+            saveToLocalStorage();
+        }
+
+        function updateSyllabusDisplay() {
+            const subject = document.getElementById('subjectSelector').value;
+            const syllabusTitle = document.getElementById('syllabusTitle');
+            const syllabusList = document.getElementById('syllabusList');
+            const subjectName = document.getElementById('subjectSelector').options[document.getElementById('subjectSelector').selectedIndex].text;
+
+            syllabusTitle.textContent = `Syllabus for ${subjectName}`;
+            syllabusList.innerHTML = '';
+            syllabusData[subject].forEach(item => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${item.unit}</strong>: ${item.description}`;
+                syllabusList.appendChild(li);
+            });
+        }
+
+        function suggestTopics() {
+            const topicInput = document.getElementById('topicInput');
+            const topicSuggestions = document.getElementById('topicSuggestions');
+            const subject = document.getElementById('subjectSelector').value;
+            const query = topicInput.value.trim().toLowerCase();
+            topicSuggestions.innerHTML = '';
+            if (query.length < 2) {
+                topicSuggestions.style.display = 'none';
+                return;
+            }
+
+            const subjectTopics = Object.keys(predefinedTimes).filter(topic => 
+                syllabusData[subject].some(item => item.unit === topic)
+            );
+
+            const matches = subjectTopics.filter(topic => 
+                topic.toLowerCase().includes(query)
+            );
+            if (matches.length > 0) {
+                matches.forEach(topic => {
+                    const div = document.createElement('div');
+                    div.textContent = `${topic} (${predefinedTimes[topic]} min)`;
+                    div.onclick = () => {
+                        topicInput.value = topic;
+                        document.getElementById('targetTime').value = predefinedTimes[topic];
+                        topicSuggestions.style.display = 'none';
+                    };
+                    topicSuggestions.appendChild(div);
+                });
+                topicSuggestions.style.display = 'block';
+            } else {
+                topicSuggestions.style.display = 'none';
+            }
+        }
+
+        function searchTopic(topicText) {
+            const query = encodeURIComponent(topicText);
+            const url = `https://www.geeksforgeeks.org/search/?q=${query}`;
+            window.open(url, '_blank');
+        }
+
+        function togglePriority(topicId, subject) {
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isHighPriority = !topic.isHighPriority;
+            updateSubjectList();
+            saveToLocalStorage();
+        }
+
+        function addTopic() {
+            const subjectSelector = document.getElementById('subjectSelector');
+            const topicInput = document.getElementById('topicInput');
+            const targetTimeInput = document.getElementById('targetTime');
+            const subject = subjectSelector.value;
+            const topicText = topicInput.value.trim();
+            let targetTime = parseInt(targetTimeInput.value);
+
+            if (topicText === '') {
+                alert('Please enter a topic!');
+                return;
+            }
+            if (isNaN(targetTime) || targetTime <= 0) {
+                alert('Please enter a valid target time (greater than 0 minutes)!');
+                return;
+            }
+
+            for (const [topic, time] of Object.entries(predefinedTimes)) {
+                if (topicText.toLowerCase().includes(topic.toLowerCase())) {
+                    targetTime = targetTime || time;
+                    break;
+                }
+            }
+            targetTime = targetTime || predefinedTimes["Default"];
+
+            const topicId = Date.now();
+            const topicData = { 
+                id: topicId, 
+                text: topicText, 
+                subject, 
+                targetTime, 
+                isHighPriority: false, 
+                isHighlighted: false,
+                isCompleted: false
+            };
+
+            if (!topicsBySubject.has(subject)) {
+                topicsBySubject.set(subject, []);
+            }
+            topicsBySubject.get(subject).push(topicData);
+            topicTimes.set(topicId, 0);
+            targetTimes.set(topicId, targetTime * 60);
+
+            updateSubjectList();
+            updateTopicSelector();
+            topicInput.value = '';
+            targetTimeInput.value = predefinedTimes["Default"];
+            document.getElementById('topicSuggestions').style.display = 'none';
+            saveToLocalStorage();
+        }
+
+        function toggleComplete(topicId) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            const span = li.querySelector('span');
+            const subject = [...topicsBySubject.keys()].find(sub => 
+                topicsBySubject.get(sub).some(t => t.id === topicId));
+            const topic = topicsBySubject.get(subject).find(t => t.id === topicId);
+            topic.isCompleted = !topic.isCompleted;
+            if (topic.isCompleted) {
+                completedTopics++;
+            } else {
+                completedTopics--;
+                topic.isHighlighted = false; // Reset highlight if uncompleted
+            }
+            span.classList.toggle('completed', topic.isCompleted);
+            updateSubjectList();
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function deleteTopic(topicId, subject) {
+            const li = document.querySelector(`li[data-topic-id="${topicId}"]`);
+            if (li.querySelector('span').classList.contains('completed')) {
+                completedTopics--;
+            }
+            topicsBySubject.set(subject, topicsBySubject.get(subject).filter(t => t.id !== topicId));
+            topicTimes.delete(topicId);
+            targetTimes.delete(topicId);
+            updateSubjectList();
+            updateTopicSelector();
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        function updateProgress() {
+            document.getElementById('progress').textContent = `Topics Completed: ${completedTopics}`;
+        }
+
+        function updateSubjectList() {
+            const subjectList = document.getElementById('subjectList');
+            subjectList.innerHTML = '';
+            topicsBySubject.forEach((topics, subject) => {
+                const div = document.createElement('div');
+                div.className = 'subject-group';
+                div.innerHTML = `<h3>${subject}</h3>`;
+                const ul = document.createElement('ul');
+                topics.sort((a, b) => {
+                    if (a.isHighPriority === b.isHighPriority) return b.id - a.id;
+                    return b.isHighPriority ? 1 : -1;
+                });
+                topics.forEach(topic => {
+                    const timeSpent = Math.round(topicTimes.get(topic.id) / 60);
+                    const targetTime = targetTimes.get(topic.id) / 60;
+                    const timeDiff = targetTime - timeSpent;
+                    const isOvertime = timeDiff < 0;
+                    ul.innerHTML += `
+                        <li data-topic-id="${topic.id}" class="${topic.isHighPriority ? 'high-priority' : ''} ${topic.isHighlighted ? 'highlighted' : ''}">
+                            <span onclick="toggleComplete(${topic.id})" class="${topic.isCompleted ? 'completed' : ''}">${topic.text}</span>
+                            <span class="time-info ${isOvertime ? 'overtime' : ''}">
+                                Target: ${targetTime} min | Spent: ${timeSpent} min | Diff: ${timeDiff.toFixed(1)} min
+                            </span>
+                            <div>
+                                <label style="font-size: 0.9em; margin-right: 10px;">
+                                    <input type="checkbox" ${topic.isHighPriority ? 'checked' : ''} 
+                                    onchange="togglePriority(${topic.id}, '${subject}')" aria-label="Mark ${topic.text} as high priority"> High Priority
+                                </label>
+                                <label style="font-size: 0.9em; margin-right: 10px;">
+                                    <input type="checkbox" ${topic.isHighlighted ? 'checked' : ''} 
+                                    onchange="toggleHighlight(${topic.id}, '${subject}')" aria-label="Highlight ${topic.text}" aria-checked="${topic.isHighlighted}"> Highlight
+                                </label>
+                                <button class="search-btn" onclick="searchTopic('${topic.text}')" aria-label="Search ${topic.text} on GeeksforGeeks">Search Topic</button>
+                                <button class="delete-btn" onclick="deleteTopic(${topic.id}, '${subject}')" aria-label="Delete ${topic.text}">Delete</button>
+                            </div>
+                        </li>
+                    `;
+                });
+                div.appendChild(ul);
+                subjectList.appendChild(div);
+            });
+        }
+
+        function updateTopicSelector() {
+            const topicSelector = document.getElementById('topicSelector');
+            topicSelector.innerHTML = '<option value="">Select a topic</option>';
+            topicsBySubject.forEach((topics, subject) => {
+                topics.forEach(topic => {
+                    const option = document.createElement('option');
+                    option.value = topic.id;
+                    option.textContent = `${subject}: ${topic.text}`;
+                    topicSelector.appendChild(option);
+                });
+            });
+        }
+
+        function toggleFocusMode() {
+            const focusContainer = document.getElementById('focusContainer');
+            focusContainer.classList.toggle('active');
+            if (focusContainer.classList.contains('active')) {
+                updateTimerSettings();
+            }
+        }
+
+        function updateTimerSettings() {
+            const workInput = parseInt(document.getElementById('workTime').value);
+            const breakInput = parseInt(document.getElementById('breakTime').value);
+            if (isNaN(workInput) || workInput <= 0) {
+                alert('Work time must be greater than 0 minutes!');
+                document.getElementById('workTime').value = 25;
+                workTime = 25 * 60;
+            } else {
+                workTime = workInput * 60;
+            }
+            if (isNaN(breakInput) || breakInput <= 0) {
+                alert('Break time must be greater than 0 minutes!');
+                document.getElementById('breakTime').value = 5;
+                breakTime = 5 * 60;
+            } else {
+                breakTime = breakInput * 60;
+            }
+            if (!timerInterval) {
+                timeLeft = isWorking ? workTime : breakTime;
+                updateTimerDisplay();
+            }
+        }
+
+        function updateButtonStates() {
+            const startBtn = document.getElementById('startBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            startBtn.disabled = !!timerInterval;
+            stopBtn.disabled = !timerInterval;
+            resetBtn.disabled = false;
+            startBtn.setAttribute('aria-disabled', !!timerInterval);
+            stopBtn.setAttribute('aria-disabled', !timerInterval);
+            resetBtn.setAttribute('aria-disabled', false);
+        }
+
+        function startTimer() {
+            updateTimerSettings();
+            const topicSelector = document.getElementById('topicSelector');
+            currentTopic = topicSelector.value;
+            if (!currentTopic) {
+                alert('Please select a topic to track time!');
+                return;
+            }
+            if (!timerInterval) {
+                lastUpdate = Date.now();
+                timerInterval = setInterval(() => {
+                    const now = Date.now();
+                    if (isWorking && now - lastUpdate >= 60000) { // Update every minute
+                        const currentTime = topicTimes.get(parseInt(currentTopic)) || 0;
+                        topicTimes.set(parseInt(currentTopic), currentTime + 60);
+                        updateSubjectList();
+                        saveToLocalStorage();
+                        lastUpdate = now;
+                    }
+                    if (timeLeft <= 0) {
+                        if (isWorking) {
+                            // End of work session, save time and start break
+                            const now = Date.now();
+                            const elapsedSeconds = Math.floor((now - lastUpdate) / 1000);
+                            const currentTime = topicTimes.get(parseInt(currentTopic)) || 0;
+                            topicTimes.set(parseInt(currentTopic), currentTime + elapsedSeconds);
+                            updateSubjectList();
+                            saveToLocalStorage();
+                            isWorking = false;
+                            timeLeft = breakTime;
+                            lastUpdate = now;
+                            // Show work notification
+                            const workNotification = document.getElementById('workNotification');
+                            workNotification.style.display = 'block';
+                            setTimeout(() => {
+                                workNotification.style.display = 'none';
+                            }, 3000);
+                            // Show break notification
+                            const breakNotification = document.getElementById('breakNotification');
+                            breakNotification.style.display = 'block';
+                            setTimeout(() => {
+                                breakNotification.style.display = 'none';
+                            }, 3000);
+                            // Play work end sound
+                            playSound('work');
+                        } else {
+                            // End of break session, stop timer and reset to work
+                            clearInterval(timerInterval);
+                            timerInterval = null;
+                            isWorking = true;
+                            timeLeft = workTime;
+                            updateButtonStates();
+                            // Play break end sound
+                            playSound('break');
+                        }
+                        updateTimerDisplay();
+                        return;
+                    }
+                    updateTimerDisplay();
+                    timeLeft--;
+                }, 1000);
+                updateButtonStates();
+            }
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+                if (isWorking && currentTopic && lastUpdate) {
+                    const now = Date.now();
+                    const elapsedSeconds = Math.floor((now - lastUpdate) / 1000);
+                    const currentTime = topicTimes.get(parseInt(currentTopic)) || 0;
+                    topicTimes.set(parseInt(currentTopic), currentTime + elapsedSeconds);
+                    updateSubjectList();
+                    saveToLocalStorage();
+                }
+                isWorking = true;
+                timeLeft = workTime;
+                document.getElementById('workNotification').style.display = 'none';
+                document.getElementById('breakNotification').style.display = 'none';
+                updateTimerDisplay();
+                updateButtonStates();
+            }
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            updateTimerSettings();
+            isWorking = true;
+            currentTopic = null;
+            lastUpdate = null;
+            timeLeft = workTime;
+            document.getElementById('workNotification').style.display = 'none';
+            document.getElementById('breakNotification').style.display = 'none';
+            updateTimerDisplay();
+            updateButtonStates();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timer = document.getElementById('timer');
+            timer.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timer.style.color = isWorking ? '#0288d1' : '#4caf50';
+        }
+    </script>
+</body>
+</html>

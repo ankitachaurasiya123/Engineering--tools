@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Battery Life Calculator</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    padding:30px;
+}
+
+.container{
+    max-width:650px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.15);
+}
+
+h1{
+    text-align:center;
+    color:#0056b3;
+}
+
+.formula{
+    background:#eef5ff;
+    padding:15px;
+    margin:20px 0;
+    border-left:4px solid #0078d7;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:20px;
+    border:none;
+    background:#0078d7;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.result{
+    margin-top:20px;
+    background:#f0fff4;
+    border-left:4px solid green;
+    padding:15px;
+    border-radius:6px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Battery Life Calculator</h1>
+
+<div class="formula">
+Battery Life (Hours) =
+Battery Capacity (mAh) ÷ Load Current (mA)
+</div>
+
+<label>Battery Capacity (mAh)</label>
+<input type="number" id="capacity">
+
+<label>Load Current (mA)</label>
+<input type="number" id="current">
+
+<button onclick="calculateBatteryLife()">
+Calculate Battery Life
+</button>
+
+<div class="result">
+
+<h2 id="hours">
+Battery Life:
+</h2>
+
+<p id="days"></p>
+
+</div>
+
+</div>
+<div style="margin-bottom:20px;">
+    <a href="index.html">🏠 Home</a>
+</div>
+
+<script>
+
+function calculateBatteryLife(){
+
+    let capacity =
+        parseFloat(document.getElementById("capacity").value);
+
+    let current =
+        parseFloat(document.getElementById("current").value);
+
+    if(isNaN(capacity) || isNaN(current) || current<=0){
+
+        alert("Please enter valid values");
+        return;
+    }
+
+    let hours = capacity / current;
+
+    let days = hours / 24;
+
+    document.getElementById("hours").innerHTML =
+        "Battery Life = " +
+        hours.toFixed(2) +
+        " Hours";
+
+    document.getElementById("days").innerHTML =
+        "Approximately " +
+        days.toFixed(2) +
+        " Days";
+}
+
+</script>
+
+</body>
+</html>
